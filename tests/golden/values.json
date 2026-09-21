@@ -1,0 +1,134 @@
+{
+  "checkerboard.rayleigh.Z1": {
+    "note": "must stay large and positive; a value near -Z^2/2 means the kinetic form has regained a null space and every eigenvector is contaminated",
+    "value": 38.69069008212058
+  },
+  "checkerboard.rayleigh.Z2": {
+    "note": "must stay large and positive; a value near -Z^2/2 means the kinetic form has regained a null space and every eigenvector is contaminated",
+    "value": 32.5668793600102
+  },
+  "closed.h2_R1.4.G1.13": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 2.933325389275607e-09
+  },
+  "closed.h2_R1.4.G2.7": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 1.187247920886314e-05
+  },
+  "closed.h2_R1.4.G3.1": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 5.778426214630983e-06
+  },
+  "closed.h2plus_R2.G1.13": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 2.7405002320243113e-09
+  },
+  "closed.h2plus_R2.G2.7": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 1.5848683091124194e-05
+  },
+  "closed.h2plus_R2.G3.1": {
+    "note": "a gate that failed before D-54 (O-13) or D-75 (O-19) and passes since; pinned so that a regression is caught as a moved value before it is caught as a red row",
+    "value": 4.500057329215323e-06
+  },
+  "eigenvalue.ground.h2_R1.4": {
+    "note": "ground-state eigenvalue at the D-42 derived grid",
+    "value": -1.2842628769764755
+  },
+  "eigenvalue.ground.h2plus_R2": {
+    "note": "ground-state eigenvalue at the D-42 derived grid",
+    "value": -1.1026281539509841
+  },
+  "eigenvalue.ground.h_atom": {
+    "note": "ground-state eigenvalue at the D-42 derived grid",
+    "value": -0.4999999999997764
+  },
+  "eigenvalue.ground.he_atom": {
+    "note": "ground-state eigenvalue at the D-42 derived grid",
+    "value": -1.9999999999991058
+  },
+  "eigenvalue.ground.he_plus": {
+    "note": "ground-state eigenvalue at the D-42 derived grid",
+    "value": -1.9999999999991058
+  },
+  "grid.derived_spacing.h_atom": {
+    "note": "derived by cdft.grid.coulomb_spacing; a change here changes every number above",
+    "value": 1.0
+  },
+  "grid.derived_spacing.he_plus": {
+    "note": "derived by cdft.grid.coulomb_spacing; a change here changes every number above",
+    "value": 0.5
+  },
+  "kinetic.h2_R1.4": {
+    "note": "T_s at the D-42 derived grid; moves independently of the eigenvalue",
+    "value": 1.547854091810127
+  },
+  "kinetic.h2plus_R2": {
+    "note": "T_s at the D-42 derived grid; moves independently of the eigenvalue",
+    "value": 0.6020920179612879
+  },
+  "kinetic.h_atom": {
+    "note": "T_s at the D-42 derived grid; moves independently of the eigenvalue",
+    "value": 0.5000000000415459
+  },
+  "kinetic.he_atom": {
+    "note": "T_s at the D-42 derived grid; moves independently of the eigenvalue",
+    "value": 4.000000000332367
+  },
+  "kinetic.he_plus": {
+    "note": "T_s at the D-42 derived grid; moves independently of the eigenvalue",
+    "value": 2.0000000001661835
+  },
+  "oracle.radial.Z1": {
+    "note": "exact -0.5; logarithmic grid, direct banded diagonalisation",
+    "value": -0.49999999999323563
+  },
+  "oracle.radial.Z2": {
+    "note": "exact -2; logarithmic grid, direct banded diagonalisation",
+    "value": -1.9999999999913596
+  },
+  "oracle.radial.Z8": {
+    "note": "exact -32; logarithmic grid, direct banded diagonalisation",
+    "value": -31.999999999028656
+  },
+  "oracle.two_centre.R1.4.electronic": {
+    "note": "Richardson-extrapolated over three nested grids, order re-measured every call",
+    "value": -1.2842692446781683
+  },
+  "oracle.two_centre.R2.electronic": {
+    "note": "Richardson-extrapolated over three nested grids, order re-measured every call",
+    "value": -1.1026342166790812
+  },
+  "oracle.two_centre.R2.literature_delta": {
+    "note": "Madsen and Peek, Atomic Data 2, 171 (1971). Pinned loosely at 1e-2 relative because the last digits of a 1e-9 agreement are extrapolation noise; what is pinned is that the agreement stays at 1e-9 and does not become 1e-6",
+    "value": 2.184181280284747e-09
+  },
+  "selfadjoint.asymmetry.Z1": {
+    "note": "relative asymmetry of the cusp operator in its own measure. Pinned loosely at 1e-3 because the value is at round-off and its last digits are BLAS noise; what is being pinned is the ORDER, which was 1e-2 before D-38 and is 1e-16 after",
+    "value": 8.419750961267092e-16
+  },
+  "selfadjoint.asymmetry.Z1_1": {
+    "note": "relative asymmetry of the cusp operator in its own measure. Pinned loosely at 1e-3 because the value is at round-off and its last digits are BLAS noise; what is being pinned is the ORDER, which was 1e-2 before D-38 and is 1e-16 after",
+    "value": 1.097978674548842e-15
+  },
+  "selfadjoint.asymmetry.Z2": {
+    "note": "relative asymmetry of the cusp operator in its own measure. Pinned loosely at 1e-3 because the value is at round-off and its last digits are BLAS noise; what is being pinned is the ORDER, which was 1e-2 before D-38 and is 1e-16 after",
+    "value": 2.672053313301687e-15
+  },
+  "stencil.laplacian.measured_order.p2": {
+    "note": "nominal 2; fitted from four refinements of a Gaussian. Pinned loosely at 1e-4 because a fitted slope is not a measured value: see _FITTED_ORDER_RTOL",
+    "value": 1.9916845023129215
+  },
+  "stencil.laplacian.measured_order.p4": {
+    "note": "nominal 4; fitted from four refinements of a Gaussian. Pinned loosely at 1e-4 because a fitted slope is not a measured value: see _FITTED_ORDER_RTOL",
+    "value": 3.968955835358482
+  },
+  "stencil.laplacian.measured_order.p6": {
+    "note": "nominal 6; fitted from four refinements of a Gaussian. Pinned loosely at 1e-4 because a fitted slope is not a measured value: see _FITTED_ORDER_RTOL",
+    "value": 5.93077829852695
+  },
+  "stencil.laplacian.measured_order.p8": {
+    "note": "nominal 8; fitted from four refinements of a Gaussian. Pinned loosely at 1e-4 because a fitted slope is not a measured value: see _FITTED_ORDER_RTOL",
+    "value": 7.876920598620036
+  }
+}

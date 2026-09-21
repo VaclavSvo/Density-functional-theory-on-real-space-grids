@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cdft"
+version = "0.5.0"
+description = "cdft: a real-space, all-electron Kohn-Sham solver with physics gates, built as a non-neural reference for learned functionals"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Václav Svoboda" }]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+keywords = ["density functional theory", "Kohn-Sham", "real-space", "finite differences", "self-interaction error", "pytorch"]
+
+# Gate G5.1 writes the installed versions of these into every record, so a result can always be
+# tied to the dependency set that produced it.
+dependencies = [
+    "torch>=2.4",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "h5py>=3.10",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Verification oracles. Optional by design: libxc and PySCF are never on the hot path (D-05), so a
+# solve must not fail because an oracle is absent -- the gate that needs one reports SKIPPED with a
+# reason instead (gate G5.3). libxc is reached through PySCF (``pyscf.dft.libxc.eval_xc``), which
+# bundles it; the standalone ``pylibxc`` wheels on PyPI are not usable (O-10).
+oracles = ["pyscf>=2.5"]
+figures = ["matplotlib>=3.8"]
+dev = ["pytest>=8.0", "ase>=3.22"]
+
+[project.scripts]
+cdft = "cdft.run:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -ra"
+markers = [
+    "slow: gates and convergence studies that take minutes; excluded from the commit-time suite",
+    "oracle: needs PySCF/libxc; deselected unless CDFT_ORACLES=1 (D-76)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "D", "UP", "B", "SIM"]
+ignore = ["D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]

@@ -1,0 +1,2417 @@
+{
+  "header": {
+    "profile": "agent",
+    "device_requested": "cuda",
+    "device": "cuda",
+    "device_description": "NVIDIA GeForce GTX 1660 Ti (capability 7.5)",
+    "torch": "2.11.0+cu128",
+    "torch_cuda": "12.8",
+    "hostname": "LAPTOP-IK0CUMRV",
+    "started_utc": "2026-09-16T10:59:14Z"
+  },
+  "unit_tests": {
+    "exit_code": 1,
+    "count": 236
+  },
+  "component_gates": [
+    {
+      "gate_id": "G0.1",
+      "verdict": "pass",
+      "measured": 0.015384925172495456,
+      "threshold": 0.05,
+      "reason": ""
+    },
+    {
+      "gate_id": "G0.9",
+      "verdict": "pass",
+      "measured": 0.01668996494415198,
+      "threshold": 0.05,
+      "reason": ""
+    },
+    {
+      "gate_id": "G0.2",
+      "verdict": "pass",
+      "measured": 5.551115123125783e-17,
+      "threshold": 1e-08,
+      "reason": ""
+    },
+    {
+      "gate_id": "G0.5",
+      "verdict": "pass",
+      "measured": 5.76116798404529e-07,
+      "threshold": 0.0001,
+      "reason": ""
+    },
+    {
+      "gate_id": "G0.6",
+      "verdict": "skipped",
+      "measured": NaN,
+      "threshold": 1e-10,
+      "reason": "PySCF (which carries libxc) is not importable; install the 'oracles' extra. The native functionals are unverified against libxc in this environment"
+    },
+    {
+      "gate_id": "G1.1",
+      "verdict": "pass",
+      "measured": 3.3306690738754696e-16,
+      "threshold": 1e-12,
+      "reason": ""
+    },
+    {
+      "gate_id": "G1.9",
+      "verdict": "pass",
+      "measured": 6.082090490544247e-16,
+      "threshold": 1e-12,
+      "reason": ""
+    },
+    {
+      "gate_id": "G1.6",
+      "verdict": "pass",
+      "measured": 2.071676163950542e-13,
+      "threshold": 1e-10,
+      "reason": ""
+    },
+    {
+      "gate_id": "G5.7",
+      "verdict": "pass",
+      "measured": 0.0,
+      "threshold": 0.0,
+      "reason": ""
+    },
+    {
+      "gate_id": "G5.8",
+      "verdict": "pass",
+      "measured": 0.0,
+      "threshold": 0.0,
+      "reason": ""
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "harmonic_w1",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 14.374,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 717038592,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 1.9984014443252818e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "pass",
+          "measured": 6.139089236967266e-12,
+          "threshold": 1e-10,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-12,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "pass",
+          "measured": 7.058065092380161e-07,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "pass",
+          "measured": 3.1086244689504383e-15,
+          "threshold": 1e-05,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 2.220446049250313e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.1,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 3.425454808692052e-08,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 6.384705454397242e-09,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario harmonic_w1"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "box_L10",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 4.051,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 190751232,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 8.881784197001252e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "pass",
+          "measured": 2.2239987629291136e-12,
+          "threshold": 1e-10,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-12,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "pass",
+          "measured": 1.3202846953609612e-11,
+          "threshold": 1e-05,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 1.1102230246251565e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.1,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0015936,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 9.964705089523637e-09,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario box_L10"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "h_atom",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 4.418,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 644476416,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 1.1102230246251565e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 4.1406912135399134e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 1.3322676295501878e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "pass",
+          "measured": 1.1549512875302008e-10,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "pass",
+          "measured": 7.27896631858016e-11,
+          "threshold": 0.1,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 6.541434061091422e-12,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "pass",
+          "measured": 8.353717717568543e-11,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 8.271161533457416e-15,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario h_atom"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "he_plus",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 4.114,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 643822592,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 1.1102230246251565e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 4.485748814668239e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 8.881784197001252e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "pass",
+          "measured": 1.1549512875302008e-10,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "pass",
+          "measured": 7.278733171744989e-11,
+          "threshold": 0.1,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 7.749134667278668e-12,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "pass",
+          "measured": 8.353762126489528e-11,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 3.397282455352979e-14,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario he_plus"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "h2plus_R2",
+      "status": "invalid",
+      "label": "invalid",
+      "error": "",
+      "elapsed_s": 10.722,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 2552296448,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 1,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 5.551115123125783e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 1.4367058185279462e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 5.551115123125783e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "fail",
+          "measured": 2.2906623680737963e-08,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "pass",
+          "measured": 0.01151254763431786,
+          "threshold": 0.1,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0015936,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "pass",
+          "measured": 6.175745807635025e-06,
+          "threshold": 0.0025,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 7.950307079340746e-12,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario h2plus_R2"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "he_atom",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 4.061,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 645016576,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 1.5543122344752192e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 4.140691213539913e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 2.6645352591003757e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "pass",
+          "measured": 1.1549512875302008e-10,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "pass",
+          "measured": 7.278710967284496e-11,
+          "threshold": 0.1,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 7.749134667278668e-12,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "pass",
+          "measured": 8.353762126489528e-11,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 3.3084646133829665e-14,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario he_atom"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "h2_R1.4",
+      "status": "invalid",
+      "label": "invalid",
+      "error": "",
+      "elapsed_s": 10.451,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 2510850048,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": null,
+      "new_failures": 0,
+      "known_open": 1,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 1.1102230246251565e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 2.876818049197733e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 2.220446049250313e-15,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "fail",
+          "measured": 3.317796058820526e-08,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.1,
+          "reason": "only 5 grid points lie in the usable fit window (0.124 to 0.28 bohr at h = 0.248148), which needs at least 8. The outer edge is capped at a fifth of the nearest internuclear distance so the fit does not read the neighbouring density instead of the cusp; a finer spacing would make this measurable"
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0015936,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "pass",
+          "measured": 2.9545837554767473e-05,
+          "threshold": 0.0025,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 3.863576125695545e-13,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "non-interacting run: with no Hartree or XC term the band energy equals the total by construction, so this comparison tests nothing (it becomes meaningful at I3)"
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1.0,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "not applicable to scenario h2_R1.4"
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "he_atom_lda",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 44.94,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 1049386496,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": 13.0,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 2.220446049250313e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario he_atom_lda"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 4.485748814668239e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario he_atom_lda"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom_lda"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom_lda"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 4.440892098500626e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "pass",
+          "measured": 1.3045744748052536e-10,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "pass",
+          "measured": 0.008060367493802456,
+          "threshold": 0.1,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 1.701853383861973e-05,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario he_atom_lda"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "pass",
+          "measured": 0.00031167344376660603,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 5.551115123125783e-16,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "pass",
+          "measured": 7.689404668553834e-12,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "pass",
+          "measured": 0.18493021429068512,
+          "threshold": 1.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "pass",
+          "measured": 1.7398746444907687e-05,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "scenario_id": "he_atom_pbe",
+      "status": "valid",
+      "label": "valid",
+      "error": "",
+      "elapsed_s": 47.808,
+      "device": "cuda:0",
+      "device_name": "NVIDIA GeForce GTX 1660 Ti",
+      "deterministic_algorithms": "off",
+      "gpu_peak_bytes": 1052139008,
+      "precision_policy": {
+        "hot_path": "float64",
+        "reduction": "float64",
+        "subspace": "float64",
+        "orthonormalisation": "float64",
+        "audit_in_float64": "True",
+        "audit_energy_tol": "1e-06",
+        "audit_density_tol": "1e-05",
+        "audit_force_tol": "1e-05",
+        "device_type": "cuda"
+      },
+      "scf_iterations": 13.0,
+      "new_failures": 0,
+      "known_open": 0,
+      "gates": [
+        {
+          "gate_id": "G0.3",
+          "verdict": "pass",
+          "measured": 2.220446049250313e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-10,
+          "reason": "not applicable to scenario he_atom_pbe"
+        },
+        {
+          "gate_id": "G0.12",
+          "verdict": "pass",
+          "measured": 4.140691213539913e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G0.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-06,
+          "reason": "not applicable to scenario he_atom_pbe"
+        },
+        {
+          "gate_id": "G1.3",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom_pbe"
+        },
+        {
+          "gate_id": "G1.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-05,
+          "reason": "not applicable to scenario he_atom_pbe"
+        },
+        {
+          "gate_id": "G1.5",
+          "verdict": "pass",
+          "measured": 4.440892098500626e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.13",
+          "verdict": "pass",
+          "measured": 1.3045744748052536e-10,
+          "threshold": 1e-08,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.11",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.1,
+          "reason": "GGA level (pbe): the exact Kohn-Sham density of a GGA does not satisfy d(ln n)/dr = -2Z at the nucleus because v_xc diverges there (D-52 item 3, D-55); measured slope -4.090079 against the bare -2Z = -4 (relative deviation 2.252e-02), recorded and not asserted"
+        },
+        {
+          "gate_id": "G4.8",
+          "verdict": "pass",
+          "measured": 3.6503581848812416e-05,
+          "threshold": 0.0015936,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.9",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0025,
+          "reason": "not applicable to scenario he_atom_pbe"
+        },
+        {
+          "gate_id": "G1.12",
+          "verdict": "pass",
+          "measured": 3.206717462679653e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G1.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.001,
+          "reason": "the run recorded no exchange-correlation scaling term (functional pbe); the interacting virial is implemented for local functionals only in this increment"
+        },
+        {
+          "gate_id": "G1.8",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.4",
+          "verdict": "pass",
+          "measured": 2.220446049250313e-16,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-08,
+          "reason": "cross_check was not enabled for this run; set EigenConfig.cross_check=True"
+        },
+        {
+          "gate_id": "G2.9",
+          "verdict": "pass",
+          "measured": 4.440892098500626e-16,
+          "threshold": 1e-12,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.1",
+          "verdict": "pass",
+          "measured": 7.2448713694939215e-12,
+          "threshold": 1e-06,
+          "reason": ""
+        },
+        {
+          "gate_id": "G2.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0001,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G3.3",
+          "verdict": "pass",
+          "measured": 0.1066462434194872,
+          "threshold": 1.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G3.4",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-07,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G4.7",
+          "verdict": "pass",
+          "measured": 6.889721751068834e-05,
+          "threshold": 0.001,
+          "reason": ""
+        },
+        {
+          "gate_id": "G4.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 0.0,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G2.7",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 8 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.1",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 3 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G3.5",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 3.674932e-05,
+          "reason": "costs 2 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.2",
+          "verdict": "skipped",
+          "measured": NaN,
+          "threshold": 1e-09,
+          "reason": "costs 1 extra solves and this profile allows 0; run with --profile full to evaluate it. The gate is implemented and this is a budget exclusion, not a deferral -- which is why it appears here as a row rather than not at all"
+        },
+        {
+          "gate_id": "G5.5",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.1",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        },
+        {
+          "gate_id": "G5.3",
+          "verdict": "pass",
+          "measured": 0.0,
+          "threshold": 0.0,
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "result": {
+    "exit_code": 1,
+    "verdict": "FAILURES PRESENT",
+    "total_s": 173.693
+  }
+}

@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "cdft: a real-space all-electron Kohn-Sham solver with physics gates"
+type: software
+authors:
+  - family-names: Svoboda
+    given-names: Václav
+version: 0.5.0
+date-released: 2026-09-20
+repository-code: "https://github.com/VaclavSvo/Density-functional-theory-on-real-space-grids"
+license: MIT
+keywords:
+  - density functional theory
+  - Kohn-Sham
+  - real-space grid
+  - finite differences
+  - self-interaction error
+  - PyTorch

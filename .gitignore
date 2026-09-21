@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.ipynb_checkpoints/
+
+# Editors
+.vscode/
+.idea/
+
+# Run artefacts: suite runs, benchmarks, probes, figure suites, profiles, logs.
+# Only the CPU reference fingerprint is versioned (see docs/02_STATUS.md, "the numerical standard").
+reports/*
+!reports/fingerprint_cpu_reference.json
+*.log
+*.err
+*.prof
+torch_compile_debug/
+
+# Corpora are data, not source: large, binary and regenerable from a config hash.
+*.h5
+*.hdf5

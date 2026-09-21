@@ -1,0 +1,718 @@
+{
+  "_meta": {
+    "deterministic_algorithms": "off",
+    "deterministic_requested": false,
+    "device": "cpu",
+    "device_name": "x86_64",
+    "device_requested": "cpu",
+    "hostname": "vm",
+    "threads": 2,
+    "torch": "2.14.0+cu130",
+    "torch_cuda": "13.0"
+  },
+  "box_L10": {
+    "density_sha256": "70d2f53a3fbfc08d04dafb845aedd588b2605574420f34a6df82cb55183fbf16",
+    "eigenvalues": [
+      "0.14804406601631043"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "2.7755575615628914e-17",
+      "harris_foulkes": "0.14804406601631043",
+      "hartree": "0.0",
+      "ion_ion": "0.0",
+      "kinetic": "0.1480440660163104",
+      "nonlocal_ps": "0.0",
+      "total": "0.14804406601631043",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "odd_reflection",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 117649,
+      "n_points": 117649,
+      "origin_bohr": [
+        -4.8,
+        -4.8,
+        -4.8
+      ],
+      "pad": 4,
+      "shape": [
+        49,
+        49,
+        49
+      ],
+      "spacing_bohr": 0.2
+    },
+    "n_iterations": 36,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "7f5935189efb089e4fe502341dee852d75ad9c3c6c854586ae0143387dd25194",
+    "status": "valid",
+    "wall_time_s": 11.741
+  },
+  "h2_R1.4": {
+    "density_sha256": "94cdb2a2c8c121bc67565b8871312d4352886fdd43b98aa445605523802e54da",
+    "eigenvalues": [
+      "-1.284262876976476"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-4.116379845763081",
+      "harris_foulkes": "-1.8542400396672374",
+      "hartree": "0.0",
+      "ion_ion": "0.7142857142857143",
+      "kinetic": "1.5478540918101291",
+      "nonlocal_ps": "0.0",
+      "total": "-1.8542400396672374",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 205379,
+      "n_points": 205379,
+      "origin_bohr": [
+        -6.766666666666666,
+        -6.766666666666666,
+        -6.766666666666667
+      ],
+      "pad": 4,
+      "shape": [
+        59,
+        59,
+        59
+      ],
+      "spacing_bohr": 0.2333333333333333
+    },
+    "n_iterations": 10,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "c38cfe85c11d963584488ace6eb467d7a40d97f87eb7352a1878862776cecb76",
+    "status": "valid",
+    "wall_time_s": 21.549
+  },
+  "h2_R1.4_lda": {
+    "density_sha256": "53452b0eb04a4aead0b751e489dd26081f717244768681b31629eac7ddbd9ad1",
+    "eigenvalues": [
+      "-0.3773160637873706"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-3.6033666374726874",
+      "harris_foulkes": "-1.1373963147725044",
+      "hartree": "1.2971506014838288",
+      "ion_ion": "0.7142857142857143",
+      "kinetic": "1.1076648092454056",
+      "nonlocal_ps": "0.0",
+      "total": "-1.1373963147687478",
+      "xc": "-0.653130802311009"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 884736,
+      "n_points": 884736,
+      "origin_bohr": [
+        -11.2,
+        -11.2,
+        -10.966666666666665
+      ],
+      "pad": 4,
+      "shape": [
+        96,
+        96,
+        96
+      ],
+      "spacing_bohr": 0.2333333333333333
+    },
+    "n_iterations": 25,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "5475f089a09a73dd08e45cc044624be12af9946387d979ca6dd226272a2f96fc",
+    "status": "valid",
+    "wall_time_s": 811.016
+  },
+  "h2_R1.4_pbe": {
+    "density_sha256": "0d71df44c396a528631811e885ea8ff3e004c7a439a18954690487f1bbd0a1c3",
+    "eigenvalues": [
+      "-0.38149545096021703"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-3.6448561667777417",
+      "harris_foulkes": "-1.1666019382360515",
+      "hartree": "1.3138926708536003",
+      "ion_ion": "0.7142857142857143",
+      "kinetic": "1.140891966642571",
+      "nonlocal_ps": "0.0",
+      "total": "-1.166601938236636",
+      "xc": "-0.6908161232407799"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 884736,
+      "n_points": 884736,
+      "origin_bohr": [
+        -11.2,
+        -11.2,
+        -10.966666666666665
+      ],
+      "pad": 4,
+      "shape": [
+        96,
+        96,
+        96
+      ],
+      "spacing_bohr": 0.2333333333333333
+    },
+    "n_iterations": 26,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "51c3c03996e5c3f117e9eaf7f84b6d9be77ffa7c92925b476d1bc2d59b048286",
+    "status": "valid",
+    "wall_time_s": 761.944
+  },
+  "h2plus_R2": {
+    "density_sha256": "638b38087ea3ed653550a17eefcaf24a1d1d70aeb2c33f3d7de0ab5eceaabbd4",
+    "eigenvalues": [
+      "-1.1026281539509817"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-1.7047201719122687",
+      "harris_foulkes": "-0.6026281539509817",
+      "hartree": "0.0",
+      "ion_ion": "0.5",
+      "kinetic": "0.602092017961287",
+      "nonlocal_ps": "0.0",
+      "total": "-0.6026281539509817",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 185193,
+      "n_points": 185193,
+      "origin_bohr": [
+        -7.0,
+        -7.0,
+        -7.0
+      ],
+      "pad": 4,
+      "shape": [
+        57,
+        57,
+        57
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 9,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "110580cca31389d80356dd869d1a6c74b6113ac58f10d92e0cba4c64e678023b",
+    "status": "valid",
+    "wall_time_s": 20.683
+  },
+  "h2plus_R2_lda": {
+    "density_sha256": "caf031b6c43f2558b3d082789495bbe40189f58200afcad82b2e65e0d657f595",
+    "eigenvalues": [
+      "-0.8060158442946557"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-1.675663645111373",
+      "harris_foulkes": "-0.5455242801575237",
+      "hartree": "0.3199948669810404",
+      "ion_ion": "0.5",
+      "kinetic": "0.5746045986949828",
+      "nonlocal_ps": "0.0",
+      "total": "-0.5455242801573794",
+      "xc": "-0.26446010072202963"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 778688,
+      "n_points": 778688,
+      "origin_bohr": [
+        -11.5,
+        -11.5,
+        -11.5
+      ],
+      "pad": 4,
+      "shape": [
+        92,
+        92,
+        92
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 13,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "40475b3dfcdaa5462e85aace0fe330325b94f20dd568e5769fccd80f8b9b8495",
+    "status": "valid",
+    "wall_time_s": 317.046
+  },
+  "h_atom": {
+    "density_sha256": "68851a27efcfed3d6d40575f87f2fafb32bf5c7b94fbb5ed24133e3b622ee4bc",
+    "eigenvalues": [
+      "-0.49999999999977607"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-1.0000000000413212",
+      "harris_foulkes": "-0.49999999999977607",
+      "hartree": "0.0",
+      "ion_ion": "0.0",
+      "kinetic": "0.5000000000415452",
+      "nonlocal_ps": "0.0",
+      "total": "-0.49999999999977596",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 35937,
+      "n_points": 35937,
+      "origin_bohr": [
+        -16.0,
+        -16.0,
+        -16.0
+      ],
+      "pad": 4,
+      "shape": [
+        33,
+        33,
+        33
+      ],
+      "spacing_bohr": 1.0
+    },
+    "n_iterations": 7,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "fc0f2183837833dd542afa5d7eaaf94b27ad2b9b6f549a5326b5031114f459c3",
+    "status": "valid",
+    "wall_time_s": 3.077
+  },
+  "h_atom_N0.5_lda": {
+    "density_sha256": "ab5152cb7921ae9a7a25368fb4beeee49325538454c6c10be7530fe9c96b5396",
+    "eigenvalues": [
+      "-0.45312078337059014"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-0.5151749042752279",
+      "harris_foulkes": "-0.27507948865196574",
+      "hartree": "0.08060584044413799",
+      "ion_ion": "0.0",
+      "kinetic": "0.26540974955029945",
+      "nonlocal_ps": "0.0",
+      "total": "-0.2750794886517205",
+      "xc": "-0.10592017437092989"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 592704,
+      "n_points": 592704,
+      "origin_bohr": [
+        -10.5,
+        -10.5,
+        -10.5
+      ],
+      "pad": 4,
+      "shape": [
+        84,
+        84,
+        84
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 10,
+    "n_states": 1,
+    "occupations": [
+      "0.5"
+    ],
+    "orbitals_sha256": "11adce399a6764b240d2e214a9aa66e6de2bc63b3344579a07915b947e2ffba3",
+    "status": "valid",
+    "wall_time_s": 159.673
+  },
+  "h_atom_lda": {
+    "density_sha256": "1faec0bdb87a9af2519bdd62c3eb4696af1f4719ddea230dd9e86beda1a92102",
+    "eigenvalues": [
+      "-0.23346310767661047"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-0.9209987439691594",
+      "harris_foulkes": "-0.44566931670248777",
+      "hartree": "0.2828351684014838",
+      "ion_ion": "0.0",
+      "kinetic": "0.42502487093109637",
+      "nonlocal_ps": "0.0",
+      "total": "-0.4456693166882553",
+      "xc": "-0.2325306120516762"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 592704,
+      "n_points": 592704,
+      "origin_bohr": [
+        -10.5,
+        -10.5,
+        -10.5
+      ],
+      "pad": 4,
+      "shape": [
+        84,
+        84,
+        84
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 16,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "d49ad59948adbd919bec4d2b974db05ac997d48bbcdf6130316e88f60e06487a",
+    "status": "valid",
+    "wall_time_s": 251.321
+  },
+  "harmonic_w1": {
+    "density_sha256": "57c315a0a07b747ad5a422a8f9ae8a4673aaa997b5fac04d4ef0dbf80b667ffe",
+    "eigenvalues": [
+      "1.4999999657473848"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "0.7499999126559271",
+      "harris_foulkes": "1.4999999657473848",
+      "hartree": "0.0",
+      "ion_ion": "0.0",
+      "kinetic": "0.7500000530914577",
+      "nonlocal_ps": "0.0",
+      "total": "1.4999999657473848",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 531441,
+      "n_points": 531441,
+      "origin_bohr": [
+        -8.0,
+        -8.0,
+        -8.0
+      ],
+      "pad": 4,
+      "shape": [
+        81,
+        81,
+        81
+      ],
+      "spacing_bohr": 0.2
+    },
+    "n_iterations": 15,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "f72a22749e376521ca31a76662dac2a9dc02690f897ced26774370c284727d95",
+    "status": "valid",
+    "wall_time_s": 19.719
+  },
+  "he_atom": {
+    "density_sha256": "13ba27c77a02cae58514f12389350e061ce084f61a6e323a96a34c6ea5531d7b",
+    "eigenvalues": [
+      "-1.9999999999991054"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-8.000000000330578",
+      "harris_foulkes": "-3.9999999999982108",
+      "hartree": "0.0",
+      "ion_ion": "0.0",
+      "kinetic": "4.000000000332367",
+      "nonlocal_ps": "0.0",
+      "total": "-3.999999999998211",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 35937,
+      "n_points": 35937,
+      "origin_bohr": [
+        -8.0,
+        -8.0,
+        -8.0
+      ],
+      "pad": 4,
+      "shape": [
+        33,
+        33,
+        33
+      ],
+      "spacing_bohr": 0.5
+    },
+    "n_iterations": 7,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "940b7ff6f83bd71577c803c95d25288c367ccb6215ec0f6996f3e90884ae9cf7",
+    "status": "valid",
+    "wall_time_s": 2.595
+  },
+  "he_atom_lda": {
+    "density_sha256": "16971a8d37ab192e50e2c6a92193428e4e5b86865b8e5799ffca530d42469f8d",
+    "eigenvalues": [
+      "-0.570409207758728"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-6.62488686593367",
+      "harris_foulkes": "-2.8348186012612735",
+      "hartree": "1.996134822125732",
+      "ion_ion": "0.0",
+      "kinetic": "2.767250746847053",
+      "nonlocal_ps": "0.0",
+      "total": "-2.8348186012535534",
+      "xc": "-0.9733173042926689"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 185193,
+      "n_points": 185193,
+      "origin_bohr": [
+        -7.0,
+        -7.0,
+        -7.0
+      ],
+      "pad": 4,
+      "shape": [
+        57,
+        57,
+        57
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 13,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "719a705a508f9b5464ba2f14b73fccac3a2942221ba97acd571ba68afa57daf7",
+    "status": "valid",
+    "wall_time_s": 64.966
+  },
+  "he_atom_pbe": {
+    "density_sha256": "10ba6a789d884b84e610bbbf50efb6981d42e6a15c9a6feeb99accffd1ecb194",
+    "eigenvalues": [
+      "-0.5792700503972146"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-6.727888384559488",
+      "harris_foulkes": "-2.8928983589175097",
+      "hartree": "2.026745419517752",
+      "ion_ion": "0.0",
+      "kinetic": "2.8543740612849406",
+      "nonlocal_ps": "0.0",
+      "total": "-2.892898358924242",
+      "xc": "-1.0461294551674465"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 185193,
+      "n_points": 185193,
+      "origin_bohr": [
+        -7.0,
+        -7.0,
+        -7.0
+      ],
+      "pad": 4,
+      "shape": [
+        57,
+        57,
+        57
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 13,
+    "n_states": 1,
+    "occupations": [
+      "2.0"
+    ],
+    "orbitals_sha256": "05f0e2d2c91b70660966283813e6976b0abd2160b903a7235c6984750d73a8f5",
+    "status": "valid",
+    "wall_time_s": 65.45
+  },
+  "he_plus": {
+    "density_sha256": "ad960b1602ce6189d95f4f3b7a393e602977e2a449edb29ca99833d27af4b72d",
+    "eigenvalues": [
+      "-1.9999999999991054"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-4.000000000165289",
+      "harris_foulkes": "-1.9999999999991054",
+      "hartree": "0.0",
+      "ion_ion": "0.0",
+      "kinetic": "2.0000000001661835",
+      "nonlocal_ps": "0.0",
+      "total": "-1.9999999999991056",
+      "xc": "0.0"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 35937,
+      "n_points": 35937,
+      "origin_bohr": [
+        -8.0,
+        -8.0,
+        -8.0
+      ],
+      "pad": 4,
+      "shape": [
+        33,
+        33,
+        33
+      ],
+      "spacing_bohr": 0.5
+    },
+    "n_iterations": 7,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "940b7ff6f83bd71577c803c95d25288c367ccb6215ec0f6996f3e90884ae9cf7",
+    "status": "valid",
+    "wall_time_s": 3.368
+  },
+  "he_plus_lda": {
+    "density_sha256": "a11d00a7c41d31ad051784b062685c9b336c626f7ddd2e5dd7f52043acf864f2",
+    "eigenvalues": [
+      "-1.4109221801893925"
+    ],
+    "energies": {
+      "dispersion": "0.0",
+      "entropy": "0.0",
+      "external": "-3.8234098068992877",
+      "harris_foulkes": "-1.8612292922518807",
+      "hartree": "0.5922681798529565",
+      "ion_ion": "0.0",
+      "kinetic": "1.8282953915112117",
+      "nonlocal_ps": "0.0",
+      "total": "-1.861229293054371",
+      "xc": "-0.45838305751925135"
+    },
+    "gpu_peak_bytes": null,
+    "grid": {
+      "boundary": "zero",
+      "fd_order": 8,
+      "gradient_order": 8,
+      "mask_fraction": 1.0,
+      "n_box_points": 185193,
+      "n_points": 185193,
+      "origin_bohr": [
+        -7.0,
+        -7.0,
+        -7.0
+      ],
+      "pad": 4,
+      "shape": [
+        57,
+        57,
+        57
+      ],
+      "spacing_bohr": 0.25
+    },
+    "n_iterations": 7,
+    "n_states": 1,
+    "occupations": [
+      "1.0"
+    ],
+    "orbitals_sha256": "2ac966bff864a64193490534953a8fa5d4557506984572c44a2f4b150d0b5480",
+    "status": "valid",
+    "wall_time_s": 37.253
+  }
+}

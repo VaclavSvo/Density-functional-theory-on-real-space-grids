@@ -1,17 +1,23 @@
 # cdft — a real-space Kohn–Sham solver with physics gates
 
-`cdft` is an all-electron, real-space density-functional-theory solver for small atoms and
-molecules, written in PyTorch (float64, CPU and CUDA). It solves the Kohn–Sham equations on a
-uniform finite-difference grid with the nuclear cusp factored out analytically, so the grid never
-sees the Coulomb singularity, and it attaches a verdict from a catalogue of physics gates to every
-number it produces. A result that fails a gate is stored as invalid rather than quietly joining a
-dataset.
+[![tests](https://github.com/VaclavSvo/Density-functional-theory-on-real-space-grids/actions/workflows/tests.yml/badge.svg)](https://github.com/VaclavSvo/Density-functional-theory-on-real-space-grids/actions/workflows/tests.yml)
+[![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-The solver is deliberately **non-neural**. It is meant to be the reference instrument that a
-learned exchange–correlation functional or a physics-informed network is later trained on and
-judged against, with a particular focus on self-interaction error — the one place where exact
-reference data are free, because for a single electron the answer is known without solving
-anything. There is no machine learning in `src/cdft/`, and gate G5.7 fails the build if any appears.
+`cdft` is an all-electron, real-space density-functional-theory solver for the one- and
+two-electron systems H, He⁺, He, H₂⁺ and H₂, written in PyTorch (float64, CPU and CUDA). It solves
+the Kohn–Sham equations on a uniform finite-difference grid with the nuclear cusp factored out
+analytically, so the grid never sees the Coulomb singularity, and it attaches a verdict from a
+catalogue of physics gates to every number it produces. A result that fails a gate is stored as
+invalid rather than quietly joining a dataset.
+
+The scope today is exactly that: Z ≤ 2, at most two electrons, spin-restricted, at the
+non-interacting, LDA and PBE levels. Those are the systems where the exact answer is either free
+(one electron) or known to high accuracy, which is what makes them useful as reference data. The
+longer-term purpose — a **non-neural reference instrument** for training and judging learned
+exchange–correlation functionals and physics-informed networks, with the focus on self-interaction
+error — is the next phase, described in [`docs/04_ROADMAP.md`](docs/04_ROADMAP.md); the training
+corpus and the Kohn–Sham inversion it needs are not built yet. What is enforced already is the
+boundary: there is no machine learning in `src/cdft/`, and gate G5.7 fails the build if any appears.
 
 ## Highlights
 
@@ -47,6 +53,15 @@ GPU times are on a GTX 1660 Ti (6 GiB) in float64. The self-consistent path is i
 to roughly O(h³); the default spacing h = 0.25 bohr is a cost choice, and `--res fine` (h = 0.20) or
 `--res reference` (h = 0.16) buys the 1e-6 Ha regime where memory allows. The complete accuracy
 ledger, the numerical standard and the open-items table are in [`docs/02_STATUS.md`](docs/02_STATUS.md).
+
+<p align="center"><img src="docs/figures/convergence.svg" alt="Energy error against grid spacing for bare H2+ and He at LDA" width="620"></p>
+
+*Energy error against grid spacing, measured on two CPU cores with the current tree. He at LDA on a
+16-bohr box falls from 3.9e-3 Ha at h = 0.5 to 5.9e-6 Ha at h = 0.2 against NIST, steeper than h³
+at coarse spacing and approaching the O(h³) of its density interpolant at fine spacing. Bare H₂⁺
+against the two-centre oracle changes sign near h ≈ 0.35 and is 6.1e-6 Ha at the production
+spacing, 2.0e-6 at h = 0.167. `python scripts/convergence_figure.py run` reproduces the data (about
+15 minutes), `draw` the figure; the rungs are versioned in `docs/figures/convergence_ladders.json`.*
 
 ## Installation
 
@@ -96,10 +111,34 @@ G3.1     pass       9.486856e-14  3.674932e-05  Grid-spacing convergence
 
 ### Systems and resolution
 
-`physics_config.py` says *what* to solve — the scenario registry (H, He⁺, He, H₂⁺, H₂, a harmonic
-well and a particle in a box, each bare and, where it applies, at LDA and PBE; H at fractional
-electron number for the delocalisation-error diagnostic). `config.py` says *how hard to try*: two
-base presets and a setups table with four named levels per scenario.
+`physics_config.py` says *what* to solve: the scenario registry. Sixteen scenarios are registered
+(`python run.py --list`); the grid column is the `standard` level.
+
+| id | system | functional | checked against | grid |
+|---|---|---|---|---|
+| `harmonic_w1` | isotropic harmonic well, ω = 1, ten levels | — | analytic spectrum (n + 3/2) ω | 81³, h = 0.20 |
+| `box_L10` | particle in a 10-bohr box | — | analytic spectrum π²n²/2L² | 49³, h = 0.20 |
+| `h_atom` | H, bare nucleus | — | exact −1/2 | 33³, h = 1.0 |
+| `he_plus` | He⁺, bare nucleus | — | exact −2 | 33³, h = 0.5 |
+| `he_atom` | He, bare nucleus, two electrons | — | exact −2 | 33³, h = 0.5 |
+| `h2plus_R2` | H₂⁺ at R = 2 bohr | — | two-centre oracle | 57³, h = 0.25 |
+| `h2_R1.4` | H₂ at R = 1.4 bohr, bare nuclei | — | two-centre oracle | 59³, h = 0.2333 |
+| `h_atom_lda` | H | LDA (VWN) | NIST SRD 141 | 84³, h = 0.25 |
+| `he_plus_lda` | He⁺ | LDA | NIST SRD 141 | 57³, h = 0.25 |
+| `he_atom_lda` | He | LDA | NIST SRD 141 | 57³, h = 0.25 |
+| `he_atom_pbe` | He | PBE | radial Kohn–Sham; PySCF cc-pV5Z | 57³, h = 0.25 |
+| `h2_R1.4_lda` | H₂ at R = 1.4 | LDA | PySCF cc-pV5Z | 96³, h = 0.2333 |
+| `h2_R1.4_pbe` | H₂ at R = 1.4 | PBE | PySCF cc-pV5Z | 96³, h = 0.2333 |
+| `h2plus_R2_lda` | H₂⁺ at R = 2 | LDA | diagnostic: the self-interaction reference system | 92³, h = 0.25 |
+| `h2plus_R8_lda` | stretched H₂⁺ at R = 8 | LDA | diagnostic: the dissociation failure (G4.5); does not converge, open item O-22 | 116³, h = 0.25 |
+| `h_atom_N0.5_lda` | H with half an electron | LDA | diagnostic: the E(N) deviation from the exact straight line | 84³, h = 0.25 |
+
+The first seven are the non-interacting leg (bare −Z/r or a model potential, validated against
+exact or oracle values); the rest are self-consistent. Three are diagnostics by design: they measure
+a known failure of semi-local functionals and are recorded, never thresholded.
+
+`config.py` says *how hard to try*: two base presets and a setups table with four named levels per
+scenario.
 
 | level | meaning |
 |---|---|
@@ -177,7 +216,8 @@ scripts/             benchmarks, fingerprint, synchronisation census, ladders, f
 scripts/probes/      one-off numerical probes (BLAS, GEMM/TRSM cliffs, cusp factorisation, mixing)
 tests/               pytest; tests/golden/values.json holds the pinned values
 reports/             run artefacts (git-ignored) and the CPU reference fingerprint
-docs/                the project documents, below
+docs/                the project documents, below; docs/figures/ holds the README figure and its data
+.github/workflows/   CI: the fast test tier on every push
 ```
 
 ## Documentation
@@ -216,13 +256,16 @@ measure — does not converge on its derived grid and does not fit a 6 GiB GPU (
 GPU path is float64 only. All of this is tracked, with numbers, in `docs/02_STATUS.md` and ordered
 in `docs/04_ROADMAP.md`.
 
-## Development
+## How this was built
 
-The code was developed with AI-assisted tooling under the author's direction and review. It is
-tested to a high standard: every result is checked at solve time by the gate catalogue against
-analytic limits, exact identities, independent oracle solvers and published reference data, and
-the pinned golden values, the CPU reference fingerprint and the known-open registry make any
-unexplained change in a number fail the build.
+The physics, the architecture and every design decision recorded in
+[`docs/05_DECISION_LOG.md`](docs/05_DECISION_LOG.md) are the author's; the implementation was
+AI-assisted, written under the author's direction and reviewed by him. What the author stands behind
+is the validation: every result is checked at solve time by the gate catalogue against analytic
+limits, exact identities, two independent oracle solvers and published reference data, the pinned
+golden values and the CPU reference fingerprint make any unexplained change in a number fail the
+build, and the fast test tier runs on every push. Readers are invited to judge the code by those
+checks rather than by its provenance.
 
 ## Citing
 

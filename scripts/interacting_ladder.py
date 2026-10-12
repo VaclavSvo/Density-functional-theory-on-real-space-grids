@@ -4,11 +4,13 @@
     python scripts/interacting_ladder.py [--systems he_lda,h_lda,he_plus_lda,he_pbe,h_pbe] \\
         [--spacings 0.5,0.35,0.25,0.2,0.16,0.125] [--box 12] [--out reports/interacting_ladder.json]
 
-Every rung is one converged SCF at fixed box and spacing with the D-42 derivation bypassed
+Every rung is one converged SCF at fixed box and spacing with the grid derivation bypassed
 (``derive_grid=False``), so the sweep varies exactly the number it claims to. The JSON records each
 rung's energy terms, eigenvalue, SCF and eigensolver diagnostics, wall time, and the difference from
 the transcribed NIST value where one exists (``cdft.reference.literature``, read there, never
-retyped). The fitted order between consecutive rungs is evidence, never a verdict (D-48).
+retyped). The fitted order between consecutive rungs is evidence, never a verdict.
+
+Design: D-42, D-48 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

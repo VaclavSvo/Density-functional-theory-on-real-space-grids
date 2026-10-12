@@ -6,8 +6,10 @@ cusp directly (no factorisation, no regularisation), and direct banded diagonali
 
 On ``x = ln r`` with ``u = exp(x/2) w`` the equation becomes the symmetric generalised problem
 ``-1/2 w_xx + [1/8 + exp(2x) v_eff] w = eps exp(2x) w``, which scaling by ``B^(-1/2)`` makes
-standard and banded. An oracle: never on the solver hot path (D-05). Rationale and measured
-accuracies: ``docs/03_METHOD.md (Part E)``.
+standard and banded. An oracle: never on the solver hot path.
+
+Design: D-05 in ``docs/05_DECISION_LOG.md``; rationale and measured accuracies in
+``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations

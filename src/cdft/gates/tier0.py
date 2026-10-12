@@ -1,4 +1,7 @@
-"""Tier 0 -- algebraic gates. No physics; each localises a bug to one module."""
+"""Tier 0 -- algebraic gates. No physics; each localises a bug to one module.
+
+Design: D-35, D-38 (the weighted self-adjointness gate) in ``docs/05_DECISION_LOG.md``.
+"""
 
 from __future__ import annotations
 
@@ -338,7 +341,7 @@ class HermiticityGate(ArtifactGate):
 
 
 class WeightedSelfAdjointnessGate(ArtifactGate):
-    """G0.12 -- relative asymmetry of ``A`` in ``<a,b>_w = integral(f^2 a b)``; 1e-12 (D-35; D-38).
+    """G0.12 -- relative asymmetry of ``A`` in ``<a,b>_w = integral(f^2 a b)``; 1e-12.
 
     The weighted replacement for G0.4 on the cusp-transformed path. It probes the same operator that
     generates the search subspace, which the staggered divergence form makes symmetric by

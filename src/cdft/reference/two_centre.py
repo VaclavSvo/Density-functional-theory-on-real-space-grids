@@ -1,4 +1,4 @@
-"""An independent two-centre reference: H2+ solved exactly by prolate-spheroidal separation (D-41).
+"""An independent two-centre reference: H2+ solved exactly by prolate-spheroidal separation.
 
 Gives the multi-centre reference at any bond length, where the radial oracle covers only spherical
 systems. In ``xi = (r_A + r_B)/R``, ``eta = (r_A - r_B)/R`` the equal-charge problem separates into
@@ -7,8 +7,10 @@ an angular and a radial equation sharing a separation constant ``A`` and the ene
 ``A_radial(E) - A_angular(E)``. The coordinates remove the Coulomb singularities, so no cusp
 treatment is needed.
 
-An oracle: nothing in the solver path imports it. Rationale, the cell-centred flux subtlety and the
-measured extrapolation orders: ``docs/03_METHOD.md (Part E)``.
+An oracle: nothing in the solver path imports it.
+
+Design: D-41, D-48 in ``docs/05_DECISION_LOG.md``; rationale, the cell-centred flux subtlety and
+the measured extrapolation orders in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -229,7 +231,7 @@ def solve_two_centre_extrapolated(
     The discretisation is exactly second order, so three solves and a division buy what a
     thousand-fold finer grid would. The order is re-measured every call and the extrapolation is
     refused when it deviates from 2 by more than 10 percent: outside its asymptotic regime it is
-    invention, not inference (D-48). Three levels is the measured optimum; a fourth is worse.
+    invention, not inference. Three levels is the measured optimum; a fourth is worse.
     """
     if levels < 2:
         raise ValueError("Richardson extrapolation needs at least two grids")

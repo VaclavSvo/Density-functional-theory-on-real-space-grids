@@ -3,12 +3,13 @@
 Every native functional is written once, as a function of the per-spin ingredients
 ``(n_up, n_dn, sigma_uu, sigma_ud, sigma_dd, tau_up, tau_dn)`` returning the energy density per
 unit volume. The spin-polarised form is primary and the restricted call is the special case
-``n_up = n_dn = n/2`` (D-51). Potentials come from ``torch.autograd`` through the energy density, so
-no functional carries a hand-transcribed derivative that could disagree with its energy (G0.5
+``n_up = n_dn = n/2``. Potentials come from ``torch.autograd`` through the energy density, so no
+functional carries a hand-transcribed derivative that could disagree with its energy (G0.5
 against finite differences, G0.6 against libxc pointwise at 1e-10).
 
 A point below :data:`DENSITY_THRESHOLD` contributes nothing and its potential is zero, as in libxc.
-Rationale: ``docs/03_METHOD.md`` (Part E).
+
+Design: D-51 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -203,7 +204,7 @@ def slater_exchange_density(n_up: torch.Tensor, n_dn: torch.Tensor) -> torch.Ten
 
     Spin scaling of exchange: ``E_x[n_up, n_dn] = (E_x[2 n_up] + E_x[2 n_dn]) / 2`` with the
     unpolarised ``e_x = -(3/4)(3/pi)^(1/3) n^(4/3)``, so per channel ``-2^(1/3) (3/4)(3/pi)^(1/3)
-    n_s^(4/3)``. Reproduces libxc ``LDA_X`` to 5.6e-17 (O-10).
+    n_s^(4/3)``. Reproduces libxc ``LDA_X`` to 5.6e-17.
     """
     factor = 2.0 ** (1.0 / 3.0) * _SLATER
     return -factor * (n_up ** (4.0 / 3.0) + n_dn ** (4.0 / 3.0))

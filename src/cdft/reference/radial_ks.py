@@ -1,4 +1,4 @@
-"""A self-consistent radial Kohn--Sham oracle for spherical atoms (Increment 3, extends D-36).
+"""A self-consistent radial Kohn--Sham oracle for spherical atoms.
 
 For a spin-restricted atom the Kohn--Sham equations separate and the radial problem solves to
 eleven digits on a logarithmic grid with none of the three-dimensional machinery: no Cartesian
@@ -8,11 +8,13 @@ PBE atoms NIST does not, without a basis-set truncation error.
 
 Independent of the 3-D path: the discretisation, the Hartree solver, the quadrature. Shared: the
 functional objects of :mod:`cdft.xc`, validated against libxc separately (G0.6), so an agreement
-here says the solver is right for the functional it was given (D-47).
+here says the solver is right for the functional it was given.
 
 ``v_H(r) = (4 pi / r) int_0^r n r'^2 dr' + 4 pi int_r^inf n r' dr'``; in radial form
 ``v_xc = e_n - (1/r^2) d/dr (r^2 2 e_sigma n')`` with ``sigma = n'^2``, derivatives by the same
 order-8 stencil in ``x = ln r`` as the eigenproblem.
+
+Design: D-36, D-47 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -102,8 +104,8 @@ def solve_radial_ks(
 ) -> RadialKSResult:
     """Solve a spin-restricted spherical atom self-consistently in the s channel.
 
-    ``n_electrons`` fills the 1s shell only (``<= 2``, fractional allowed, D-11), which covers every
-    Phase 1 atom; ``functional`` is a :class:`~cdft.xc.base.SemiLocalFunctional` of rung 1 or 2.
+    ``n_electrons`` fills the 1s shell only (``<= 2``, fractional allowed), which covers every one-
+    and two-electron atom; ``functional`` is a :class:`~cdft.xc.base.SemiLocalFunctional` of rung 1 or 2.
     """
     if functional.rung.value > XCRung.GGA.value:
         raise NotImplementedError("the radial oracle covers LDA and GGA; meta-GGA needs the tau term")

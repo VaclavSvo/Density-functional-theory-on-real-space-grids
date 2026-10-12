@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Publication figures for every registered scenario, one ``figures.py`` process per scenario (D-72).
+"""Publication figures for every registered scenario, one ``figures.py`` process per scenario.
 
 One process per scenario returns the card's memory between runs and isolates failures; each logs to
 ``<root>/<scenario>/figures.log`` and the suite writes ``suite_summary.{json,txt}`` under ``--out``.
 Names, options, figure scope and CUDA availability (G5.5) are checked before the first solve;
-``--help`` has the exit codes. Rationale: ``docs/03_METHOD.md`` Part E (``figures.py``).
+``--help`` has the exit codes. Rationale: ``docs/03_METHOD.md`` Part E (``figures.py``); D-72 in
+``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

@@ -5,8 +5,10 @@
 with ``D_d`` the staggered first derivative onto cell faces and ``D_d^T`` its exact transpose. The
 form is self-adjoint in the ``f^2`` measure by construction, at any stencil order and for any
 positive weight, and has no checkerboard null space. Face weights are evaluated analytically at the
-face coordinate, never interpolated. Why the two discretisations this replaced failed: D-38,
-``docs/03_METHOD.md (Part E)``.
+face coordinate, never interpolated.
+
+Design: D-38 (why the two earlier discretisations failed), D-65 in ``docs/05_DECISION_LOG.md``;
+rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -158,7 +160,7 @@ def weighted_divergence(
     """Return ``sum_d D_d^T [ w_d  D_d phi ]`` on the box, which equals ``-div(w grad phi)``.
 
     The CPU path is :func:`_weighted_divergence_eager`; CUDA dispatches to
-    :func:`cdft.operators.fused.device_weighted_divergence`, which may re-associate the sums (D-65).
+    :func:`cdft.operators.fused.device_weighted_divergence`, which may re-associate the sums.
     """
     if box.device.type == "cuda":
         from .fused import device_weighted_divergence
@@ -174,7 +176,7 @@ def _weighted_divergence_eager(
     accuracy: int,
     shape: tuple[int, int, int],
 ) -> torch.Tensor:
-    """The eager staggered stencil behind :func:`weighted_divergence` (the CPU audit path, D-38).
+    """The eager staggered stencil behind :func:`weighted_divergence` (the CPU audit path).
 
     ``D^T D`` is *already* the positive Laplacian, so no sign is applied here; the form is positive
     semi-definite for any positive ``w`` at any stencil order.

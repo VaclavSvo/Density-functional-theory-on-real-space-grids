@@ -1,7 +1,7 @@
 """Density mixers for the self-consistent iteration: linear, Anderson/Pulay, periodic Pulay, Kerker.
 
-All of them change only the path to the fixed point, never the point itself (D-16; G3.4 proves it
-by converging from three starts). Each implements :class:`~contract.MixerProtocol`:
+All of them change only the path to the fixed point, never the point itself (G3.4 checks it by
+converging from three starts). Each implements :class:`~contract.MixerProtocol`:
 ``mix(n_in, n_out, iteration) -> n_next``, with a ``reset`` for the fallback ladder.
 
 * :class:`LinearMixer` -- ``n_in + alpha (n_out - n_in)``; the rung nothing falls below.
@@ -15,6 +15,8 @@ by converging from three starts). Each implements :class:`~contract.MixerProtoco
 
 The residual norm reported to the loop is the L1 norm in the caller's measure, so it counts
 electrons and :class:`~contract.SCFConfig`'s density tolerance is meaningful.
+
+Design: D-16 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

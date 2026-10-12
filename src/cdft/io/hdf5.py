@@ -2,8 +2,9 @@
 
 The schema is :data:`~contract.CORPUS_LAYOUT`, authoritative so a reader in another language can be
 built from the contract alone. Two load-bearing properties, both gated: the default iterator yields
-only trusted records (G5.4), and fields are stored rather than summarised (D-14). Rationale:
-``docs/03_METHOD.md (Part E)``.
+only trusted records (G5.4), and fields are stored rather than summarised.
+
+Design: D-14 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations

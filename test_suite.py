@@ -13,14 +13,16 @@
 The exit code is 0 only if everything passed (gate G5.6). The three layers are reported separately:
 unit tests prove the code does what it was written to do; component gates verify an operator at a
 configuration; scenario gates are evaluated on a completed run and travel with the record into the
-corpus (D-13). A gate a scenario names and this build cannot evaluate is a failure, not an omission.
+corpus. A gate a scenario names and this build cannot evaluate is a failure, not an omission.
 
 A profile decides which checks run, never the settings they run at: several gate thresholds are
 DERIVED from the production grid, so a coarser grid would make them fail correctly. Profiles differ
 in pytest selection, gate solve budget, LOBPCG cross-check, which scenarios are solved and the
 default device (``gpu`` is ``full`` on CUDA); anything left out is printed with its reason (G5.3,
-G5.5). Strict kernels live only inside gate G5.2 (D-61). ``--device`` also reaches the pytest
+G5.5). Strict kernels live only inside gate G5.2. ``--device`` also reaches the pytest
 subprocess (``CDFT_DEVICE``); ``cuda`` without a device exits 2 and nothing falls back (G5.5).
+
+Design: D-13, D-53, D-61, D-81, D-83 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -54,7 +56,7 @@ PROFILES: dict[str, dict[str, object]] = {
         "device": "cpu",
         "deterministic": False,
         # Measured on two CPU cores: 126 s for the harmonic well (G1.2 needs h = 0.20) plus two
-        # self-consistent scenarios of minutes each (D-53).
+        # self-consistent scenarios of minutes each.
         "budget_seconds": 900,
         "scenarios": "quick",
         "description": "inner loop: fast tests, no ladder-building gates, no cross-check, two interacting scenarios",
@@ -97,18 +99,16 @@ CPU_ONLY_REASON = (
 )
 
 #: Host memory a CPU solve of a scenario needs, where it exceeds a small host: the measured peak
-#: plus headroom. `h2plus_R8_lda` on its derived 116^3 box reached 6.1 GB RSS and was killed by a
-#: 5.8 GiB cgroup on 2026-09-18 (O-22); a host below the figure skips it visibly (G5.5).
+#: plus headroom (``h2plus_R8_lda`` on its derived 116^3 box peaks at ~6.1 GB RSS). A host below
+#: the figure skips it visibly (G5.5).
 HOST_MEMORY_NEEDED_BYTES: dict[str, int] = {"h2plus_R8_lda": 8 * 2**30}
 
 #: Why a scenario in :data:`HOST_MEMORY_NEEDED_BYTES` is not solved on a small host.
 HOST_MEMORY_REASON = "its measured CPU peak exceeds this host's memory (O-22); run it on a larger host"
 
-#: Card memory a CUDA solve of a scenario needs, where it exceeds a small card: `h2plus_R8_lda`
-#: ran 631 s on a 6 GiB GTX 1660 Ti and died asking for 434 MiB more at 4.58 GiB
-#: allocated (2026-09-18 and 09-19, the ladder's rungs inside the 200-iteration limit), as it did
-#: in the throughput work (3.55 + 1.34 GiB). A card below the figure skips it visibly (G5.5, D-83) instead of
-#: spending ten minutes on an error row.
+#: Card memory a CUDA solve of a scenario needs, where it exceeds a small card: ``h2plus_R8_lda``
+#: does not fit a 6 GiB card (it runs out beyond ~4.6 GiB allocated, after ten minutes). A card
+#: below the figure skips it visibly (G5.5) instead of spending that time on an error row.
 DEVICE_MEMORY_NEEDED_BYTES: dict[str, int] = {"h2plus_R8_lda": 8 * 2**30}
 
 #: Why a scenario in :data:`DEVICE_MEMORY_NEEDED_BYTES` is not solved on a small card.
@@ -195,8 +195,8 @@ class SuiteLog:
 def _gate_rows(results) -> list[dict[str, object]]:
     """Compact JSON form of a gate report; a row that did not pass carries the gate's detail.
 
-    The 2026-09-18 CUDA full run recorded G5.9 as ``measured 4.0`` and nothing else, so which
-    budgets the card's host exceeded could not be read back from the file (O-31).
+    Without the detail a failing row is a bare ``measured`` number (G5.9's, say), and what it
+    exceeded cannot be read back from the file.
     """
     rows: list[dict[str, object]] = []
     for r in results:
@@ -213,8 +213,8 @@ def _gate_rows(results) -> list[dict[str, object]]:
     return rows
 
 
-#: Below this much host memory the unit tests run one file per pytest process (D-81): the whole
-#: ``--runslow`` tier in one process was OOM-killed at 5.8 GB on a 2-core, 8 GiB host with a 5.8 GiB cgroup limit.
+#: Below this much host memory the unit tests run one file per pytest process: the whole
+#: ``--runslow`` tier in one process needs more than 5.8 GB, beyond a small host's cgroup limit.
 UNIT_TESTS_ONE_PROCESS_MIN_BYTES = 8 * 2**30
 
 
@@ -293,7 +293,7 @@ def run_gates(
     """Run the component gates and the selected scenarios on ``device_name``; return exit code.
 
     ``only`` narrows the profile's scenarios to the ids given (``--scenarios``): the way a small host
-    runs the ``full`` profile one process per scenario (D-81). Printed and recorded, never silent.
+    runs the ``full`` profile one process per scenario. Printed and recorded, never silent.
     """
     from cdft.config import ALL_ELECTRON_NUMERICS, MODEL_SYSTEM_NUMERICS
     from cdft.gates.known_open import COMPONENT, partition_failures

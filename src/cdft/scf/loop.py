@@ -9,6 +9,8 @@ Convergence requires both ``|dE| < energy_tol`` and ``||dn||_1 < density_tol`` (
 is satisfied by a stalled iteration. ``dn`` is the input-density change in the cusp-aware L1 norm,
 in electrons. The energy per iteration is the variational Kohn--Sham energy of that iteration's
 output orbitals (G2.3), with the Harris--Foulkes energy at the input density beside it (G2.1).
+
+Design: D-16, D-55, D-68 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -65,14 +67,14 @@ __all__ = ["solve_self_consistent", "initial_density", "build_interacting_step",
 #: Initial-guess strategies: three genuinely different starting points for G3.4.
 INITIAL_GUESSES = ("hydrogenic", "diffuse", "compact")
 
-#: Chebyshev filter steps per SCF iteration after the first [F1]. A path choice: same fixed point
-#: to 4e-12 with 2 or 4, but with 2 the output density carries eigenvector error at the density
-#: tolerance and the residual wanders in the tail (D-55 item 8). The final diagonalisation always
-#: runs to the eigensolver's own tolerance.
+#: Chebyshev filter steps per SCF iteration after the first [F1]. A path choice: 2 and 4 reach the
+#: same fixed point to 4e-12, but with 2 the output density carries eigenvector error at the
+#: density tolerance and the residual wanders in the tail. The final diagonalisation always runs
+#: to the eigensolver's own tolerance.
 FILTER_STEPS_PER_ITERATION = 4
 
-#: Reuse the Lanczos spectral bounds across SCF iterations (D-68): a path choice (D-16) worth ~12
-#: of ~92 operator applications per iteration. ``CDFT_LANCZOS_REUSE=0`` switches it off.
+#: Reuse the Lanczos spectral bounds across SCF iterations: a path choice worth ~12 of ~92
+#: operator applications per iteration. ``CDFT_LANCZOS_REUSE=0`` switches it off.
 LANCZOS_BOUND_REUSE = True
 
 #: Force a fresh Lanczos estimate this often: the backstop against a carried interval that is
@@ -90,7 +92,7 @@ def lanczos_reuse_enabled() -> bool:
 
 
 class BoundReusePolicy:
-    """When an SCF iteration may filter with the previous iteration's spectral bounds (D-68).
+    """When an SCF iteration may filter with the previous iteration's spectral bounds.
 
     The Weyl bound ``max |v_eff,new - v_eff,old|`` widens the carried interval, keeping it an
     enclosure (:class:`~cdft.eigen.chefsi.SpectralBoundsHint`); :meth:`decide` lists the cases that

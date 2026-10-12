@@ -1,9 +1,8 @@
-"""Shim: the canonical module is ``run.py`` at the repository root (D-57).
+"""Shim: the canonical module is ``run.py`` at the repository root.
 
-Kept so that ``cdft.run`` -- the import path every test, script and gate uses -- keeps working
-while the file that is edited sits beside ``contract.py``. The module object is shared: this entry
-in ``sys.modules`` *is* the root module, so there is exactly one ``REGISTRY``/``NUMERICS`` and
-``isinstance`` never sees two classes of the same name.
+Keeps the import path ``cdft.run`` working while the edited file sits beside ``contract.py``.
+This ``sys.modules`` entry *is* the root module, so there is one set of module-level registries and
+``isinstance`` never sees two classes of the same name. Design: D-57 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

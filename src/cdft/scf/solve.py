@@ -4,7 +4,9 @@
 eigenproblem and goes to :func:`~cdft.scf.noninteracting.solve_noninteracting`; anything else
 carries a Hartree term and the named functional and goes to :mod:`cdft.scf.loop`. The choice is
 made from the scenario alone, so a caller cannot run an interacting scenario through the
-non-interacting solver by picking the wrong function (D-53).
+non-interacting solver by picking the wrong function.
+
+Design: D-53 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

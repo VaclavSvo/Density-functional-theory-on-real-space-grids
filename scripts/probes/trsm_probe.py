@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Isolate the triangular solve of ``orthonormalise`` on the GPU (H4, second probe).
+"""Isolate the triangular solve of ``orthonormalise`` on the GPU (follow-up to ``gemm_probe.py``).
 
     python scripts/probes/trsm_probe.py
 

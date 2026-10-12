@@ -1,10 +1,12 @@
 """Rung-3 functionals -- r2SCAN [A11], [A12]: deferred, deliberately not transcribed.
 
-The reference definitions were unreachable and nothing is filled in from memory (D-29), so
+The reference definitions were unreachable and nothing is filled in from memory, so
 requesting ``r2scan`` raises :data:`R2SCAN_DEFERRAL_REASON` rather than returning a stub. The
 meta-GGA SCF terms -- ``-(1/2) div(v_tau grad psi)`` in ``Hamiltonian.apply`` and
 ``(1/2) integral v_tau sum_i f_i |grad psi_i|^2`` in the energy -- are deferred with it, so the
 whole rung is deferred, not only the transcription.
+
+Design: D-29 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

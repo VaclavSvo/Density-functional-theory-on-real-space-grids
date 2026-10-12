@@ -1,7 +1,9 @@
-"""Independent reference solvers used as oracles. Never on the solver hot path (D-05).
+"""Independent reference solvers used as oracles. Never on the solver hot path.
 
-The PySCF/libxc oracles run only when :func:`oracles_enabled` says so (``CDFT_ORACLES=1``, O-24);
-the radial and two-centre references are in-house and always on.
+The PySCF/libxc oracles run only when :func:`oracles_enabled` says so (``CDFT_ORACLES=1``); the
+radial and two-centre references are in-house and always on.
+
+Design: D-05 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

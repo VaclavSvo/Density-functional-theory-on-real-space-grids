@@ -6,8 +6,9 @@ and citation, and all were transcribed on :data:`TRANSCRIPTION_DATE`.
 
 The NIST values answer a different problem -- Kohn--Sham with the VWN local functional -- so they
 test whether we solve the same equations the same way, not whether the functional is right.
-Gaussian-basis totals for He and H2 are deliberately absent (O-12). Sources and per-row notes:
-``docs/03_METHOD.md (Part E)``.
+Gaussian-basis totals for He and H2 are deliberately absent; they are computed, with a basis-set
+uncertainty, in :mod:`cdft.reference.computed`. Sources and per-row notes: ``docs/03_METHOD.md``
+Part E.
 """
 
 from __future__ import annotations
@@ -247,7 +248,7 @@ def decomposition_residual(system: str, functional: str) -> float:
     """Return ``|E_tot - (E_kin + E_coul + E_enuc + E_xc)|`` for one NIST row, in Hartree.
 
     A transcription check only: a non-zero result means a digit was mistyped here. No test calls it
-    (``docs/02_STATUS.md (Part C)`` D-5).
+    (see ``docs/02_STATUS.md`` Part C).
     """
     parts = ("kinetic_energy", "hartree_energy", "external_energy", "xc_energy")
     keys = [f"{system}/{functional}/{part}" for part in parts]

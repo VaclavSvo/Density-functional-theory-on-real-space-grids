@@ -2,8 +2,8 @@
 
     python scripts/probes/cusp_factorisation_probe.py     # prints the ladder, writes nothing
 
-The bare -Z/r all-electron path converges as O(h^1) (D-32, the ladder of the retired gate G1.10,
-which lives here now). Writing psi = f phi with the Kato factor f = exp(-Z r) gives
+The bare -Z/r all-electron path converges as O(h^1) (D-32; this is the ladder of the retired
+gate G1.10). Writing psi = f phi with the Kato factor f = exp(-Z r) gives
 
     A phi = f^-1 H (f phi) = -1/2 lap(phi) + Z (rhat . grad phi) - (Z^2 / 2) phi,
 

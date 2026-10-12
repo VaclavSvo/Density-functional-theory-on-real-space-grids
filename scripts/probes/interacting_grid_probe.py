@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""The interacting grid rule, by measurement (D-53, D-54).
+"""The interacting grid rule, by measurement.
 
     python scripts/probes/interacting_grid_probe.py [--out reports/interacting_grid_probe.json]
 
-On the hydrogenic 1s density ``n = (Z^3/pi) f^2`` (the exact Phase-1 density of H and He+, every
+On the hydrogenic 1s density ``n = (Z^3/pi) f^2`` (the exact density of H and He+, every
 integral closed-form) at a ladder of spacings, compare the plain ``h^3`` sum with the cusp-aware
 quadrature of ``cdft.operators.quadrature`` on ``int n - N`` (exact 0), ``E_H`` (exact ``5Z/16``),
 ``int n v_H`` (exact ``5Z/8``) and ``E_xc^LDA(VWN)`` -- the last against a 400001-point radial
 trapezoid of the same functional on the same density. ``v_H`` is the closed-form 1s potential.
 
-Evidence for D-53: on the D-42 atomic grid (``h = 1/Z``) the plain rule is wrong by 15 % in the
-charge and 0.19--0.37 Ha in ``E_H``, while the cusp-aware rule is already exact to 1e-8 there, so
-the interacting spacing is set by the interpolation of the self-consistent density, not by the
+On the bare-Coulomb atomic grid (``h = 1/Z``) the plain rule is wrong by 15 % in the charge and
+0.19--0.37 Ha in ``E_H``, while the cusp-aware rule is already exact to 1e-8 there, so the
+interacting spacing is set by the interpolation of the self-consistent density, not by the
 quadrature of the cusp. Writes the table as JSON to ``--out``.
+
+Evidence for D-53 and D-54 (grid rule D-42) in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

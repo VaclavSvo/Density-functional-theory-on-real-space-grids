@@ -2,12 +2,14 @@
 
 G2.5 requires the two eigensolvers to agree to 1e-8 Ha on every occupied state: a disagreement
 localises a fault to the solver, an agreement to the Hamiltonian. ``torch.lobpcg`` takes a matrix
-and the architecture never forms one (D-06), so this is matrix-free with the usual conditioning
-safeguards. Rationale: ``docs/03_METHOD.md (Part E)``.
+and the architecture never forms one, so this is matrix-free with the usual conditioning
+safeguards.
 
-On the cusp-factorised path the preconditioner acts in the similarity frame (D-56): the filter
-models the plain Laplacian, which is the operator on ``psi = f phi``, not on ``phi``. Applied to
-``phi`` directly it is worse than no preconditioner and stagnates on the molecules.
+On the cusp-factorised path the preconditioner acts in the similarity frame: the filter models the
+plain Laplacian, which is the operator on ``psi = f phi``, not on ``phi``. Applied to ``phi``
+directly it is worse than no preconditioner and stagnates on the molecules.
+
+Design: D-06, D-56 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -25,7 +27,7 @@ __all__ = ["LOBPCG"]
 
 
 PRECONDITIONER_FRAMES = ("similarity", "transformed", "none")
-"""Where the kinetic preconditioner acts (D-56).
+"""Where the kinetic preconditioner acts.
 
 ``"similarity"`` (default)
     ``f^-1 K f``: the residual is mapped to the wavefunction frame (``r_psi = f r_phi``, exact for
@@ -209,15 +211,15 @@ class LOBPCG:
         return grid.gather_from_box(preconditioned)
 
     def _measure_of(self, hamiltonian: object) -> Measure:
-        """Return the operator's own inner product, the uniform one when it carries none (D-56)."""
+        """Return the operator's own inner product, the uniform one when it carries none."""
         return getattr(hamiltonian, "measure", None) or Measure.uniform(self.grid)
 
     def orthonormality_error(self, hamiltonian: object, vectors: torch.Tensor) -> float:
-        """Return ``max |S - I|`` of a block in the operator's measure, for gate G0.3 (O-27)."""
+        """Return ``max |S - I|`` of a block in the operator's measure, for gate G0.3."""
         return orthonormality_error(vectors, self._measure_of(hamiltonian))
 
     def residuals(self, hamiltonian: object, evals: torch.Tensor, vectors: torch.Tensor) -> torch.Tensor:
-        """Return the per-state residual norms in the operator's measure, for gate G2.4 (O-27)."""
+        """Return the per-state residual norms in the operator's measure, for gate G2.4."""
         return residual_norms(hamiltonian, evals, vectors, self._measure_of(hamiltonian))
 
 

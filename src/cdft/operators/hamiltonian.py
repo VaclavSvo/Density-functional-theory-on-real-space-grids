@@ -1,10 +1,13 @@
 """The Kohn--Sham Hamiltonian, exposed only through its action on a block of orbitals.
 
-The seam of the whole architecture (D-06): ``H`` is never materialised, so memory scales as
+The seam of the whole architecture: ``H`` is never materialised, so memory scales as
 ``n_states * n_points``, the Chebyshev filter needs nothing else, and a TDDFT propagator can be
 added later without touching anything below this line. :class:`LocalHamiltonian` is kinetic plus a
 fixed local potential; :class:`CuspFactoredHamiltonian` is ``A = f^-1 H f`` in staggered divergence
-form. Rationale: ``docs/03_METHOD.md (Part E)``.
+form.
+
+Design: D-06, D-35, D-38, D-44, D-52, D-54 in ``docs/05_DECISION_LOG.md``; rationale in
+``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -189,10 +192,10 @@ class CuspFactoredHamiltonian:
     :meth:`~cdft.operators.quadrature.CuspQuadrature.effective_potential`.
 
     With a :class:`~cdft.operators.quadrature.CuspQuadrature` the inner product is its mass weights
-    ``omega_i``, not the plain ``f^2(r_i) h^3`` (D-54), so the weak form is
+    ``omega_i``, not the plain ``f^2(r_i) h^3``, so the weak form is
     ``(1/2) sum_faces f^2_face Da Db h^3 + sum_i omega_i (W~_i + v~_i) a_i b_i``: the kinetic term
     keeps the staggered divergence form (exact for constant ``phi``, positive semi-definite, no null
-    space -- D-38) and every potential term is a lumped Galerkin integral. ``apply`` therefore
+    space) and every potential term is a lumped Galerkin integral. ``apply`` therefore
     divides the kinetic term by ``omega_i / h^3`` instead of ``f^2_i`` and ``W`` enters as ``W~``.
     For one nucleus ``W~ = -Z^2/2`` exactly, so single-centre eigenvalues do not move; molecular
     ones do, and the density is normalised in a measure that integrates the cusp weight exactly
@@ -237,7 +240,7 @@ class CuspFactoredHamiltonian:
         self._grad_u = factor.grad_u
         self._apply_count = 0
         #: True when ``apply`` uses the staggered divergence form, exactly self-adjoint in
-        #: :attr:`measure`. Recorded per run and read by the eigensolver's second criterion (D-44).
+        #: :attr:`measure`. Recorded per run; read by the eigensolver's second convergence test.
         self.uses_divergence_form = not factor.is_identity
 
     @property
@@ -319,7 +322,7 @@ class CuspFactoredHamiltonian:
         return self._potential
 
     def update_potentials(self, density: torch.Tensor) -> None:
-        """Refuse: the density-dependent terms arrive with Increment 3."""
+        """Refuse: the potential is fixed; the SCF builds one operator per iteration instead."""
         raise NotImplementedError(
             "CuspFactoredHamiltonian carries a fixed extra_potential; the self-consistent "
             "Hamiltonian arrives with Increment 3"
@@ -332,7 +335,7 @@ class CuspFactoredHamiltonian:
         + (1/2) int f^2 rho |grad u|^2``, ``rho = sum_i f_i phi_i^2``. On the quadrature path the
         first term is the operator's own kinetic form (so the band-energy identity closes to
         round-off) and the other two are cusp-aware integrals with ``grad u`` analytic at the nodes.
-        Without the quadrature, the D-35 gradient form with plain sampling.
+        Without the quadrature, :meth:`CuspFactor.kinetic_energy` (gradient form, plain sampling).
         """
         if self.quadrature is None or self.factor.is_identity:
             return self.factor.kinetic_energy(phi, occupations)
@@ -359,7 +362,7 @@ class CuspFactoredHamiltonian:
 
         These two bounded integrals carry the external energy of a transformed density: by parts
         with ``lap u = -2 v_ext``, ``E_ext = (1/2) Q[f^2 grad rho . grad u] + 2 Q[f^2 rho W]``, so
-        the singular ``int n v_ext`` never appears (D-52 item 2, D-54).
+        the singular ``int n v_ext`` never appears.
         """
         q = self.quadrature
         assert q is not None

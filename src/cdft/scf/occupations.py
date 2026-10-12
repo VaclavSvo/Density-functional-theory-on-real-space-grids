@@ -1,7 +1,9 @@
-"""Occupation numbers -- floating point from the first increment (D-11).
+"""Occupation numbers, floating point throughout.
 
 Nothing here is integer-typed, including the closed-shell aufbau case. Smearing arrives with spin
-polarisation and is deliberately not stubbed in. Rationale: ``docs/03_METHOD.md (Part E)``.
+polarisation and is deliberately not stubbed in.
+
+Design: D-11 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -19,7 +21,7 @@ def aufbau_occupations(
 ) -> torch.Tensor:
     """Fill states from the bottom, allowing a fractional electron in the frontier orbital.
 
-    ``eigenvalues`` ``(n_spin, n_states)`` ascending; ``n_electrons`` may be fractional (D-11);
+    ``eigenvalues`` ``(n_spin, n_states)`` ascending; ``n_electrons`` may be fractional;
     ``n_spin`` 1 means capacity 2 per spatial orbital, 2 means capacity 1; ``magnetisation``
     ``M = N_up - N_down`` requires ``n_spin == 2``. Returns float64 ``(n_spin, n_states)``.
     """

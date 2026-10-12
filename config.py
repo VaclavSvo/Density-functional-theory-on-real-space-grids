@@ -1,16 +1,17 @@
 """Loading and validation of :class:`~contract.NumericsConfig` -- "how hard to try".
 
-Never names a chemical species; that is :mod:`cdft.physics_config` (Q1.5). Every loader rejects
-unknown keys and unknown enum values rather than defaulting them. The per-system setups at the
-bottom name the resolution levels a scenario may be run at (D-73).
+Never names a chemical species; that is :mod:`cdft.physics_config`. Every loader rejects unknown
+keys and unknown enum values rather than defaulting them. The per-system setups at the bottom name
+the resolution levels a scenario may be run at.
 
-Rationale for the numbers in each named configuration: ``docs/03_METHOD.md (Part E)``.
+Design: D-42, D-53, D-57, D-64, D-73 in ``docs/05_DECISION_LOG.md``; rationale for the numbers in
+each named configuration in ``docs/03_METHOD.md (Part E)``.
 """
 
 from __future__ import annotations
 
-# Path bootstrap: this file is canonical at the repository root next to ``contract.py`` (D-57), so
-# the three "what and how" modules import without the package being installed.
+# Path bootstrap: this file is canonical at the repository root next to ``contract.py``, so the
+# three "what and how" modules import without the package being installed.
 import pathlib as _pathlib
 import sys as _sys
 
@@ -181,7 +182,7 @@ def load_numerics(path: str | pathlib.Path) -> NumericsConfig:
 # ---------------------------------------------------------------------------------------------
 # Not presets that hide a choice: each exists because a specific gate needs a specific resolution.
 
-#: Production defaults, unchanged from the contract. The pseudopotential path of Phase 2.
+#: Production defaults, unchanged from the contract; reserved for the pseudopotential path.
 DEFAULT_NUMERICS = NumericsConfig()
 
 #: Analytic model systems -- harmonic well (G1.2), particle in a box (G1.3), grid isotropy (G1.4).
@@ -203,17 +204,17 @@ MODEL_SYSTEM_NUMERICS = NumericsConfig(
     device=Device.CPU,
 )
 
-#: The Phase 1 all-electron path: a bare -Z/r nucleus on the cusp-factorised operator.
+#: The all-electron path: a bare -Z/r nucleus on the cusp-factorised operator.
 #:
 #: **The grid below is a placeholder, not a choice.** Both box and spacing are derived per scenario
 #: by :func:`cdft.grid.grid_config_for_scenario` and every derivation is written into the record as
-#: an override (G5.5, D-42). The values are the single-centre Z = 1 ones, so a caller bypassing the
+#: an override (G5.5). The values are the single-centre Z = 1 ones, so a caller bypassing the
 #: derivation still gets a sane grid. The component gates are not scenario-bound and derive nothing:
-#: ``run.py --numerics all-electron`` runs them at this ``spacing = 1.0``, where G0.2's fixture
-#: (a Gaussian of ``sigma = 4h = 4`` bohr in the gate's fixed 16-bohr box) truncates its own test
-#: charge at ``2 sigma`` and fails at 5.77e-3 Ha -- a fixture limit, not a solver error (the same
-#: solve in a 64-bohr box passes at 1e-16), and expected (B3). ``--numerics auto``, the default,
-#: runs the component gates at :data:`MODEL_SYSTEM_NUMERICS`.
+#: ``run.py --numerics all-electron`` runs them at ``spacing = 1.0``, where G0.2's fixture (a
+#: Gaussian of ``sigma = 4h = 4`` bohr in a fixed 16-bohr box) truncates its own test charge at
+#: ``2 sigma`` and fails at 5.77e-3 Ha -- an expected fixture limit, not a solver error (a 64-bohr
+#: box passes at 1e-16). ``--numerics auto``, the default, runs them at
+#: :data:`MODEL_SYSTEM_NUMERICS`.
 ALL_ELECTRON_NUMERICS = NumericsConfig(
     grid=GridConfig(
         spacing=1.0,
@@ -238,7 +239,7 @@ PRESETS: dict[str, NumericsConfig] = {
 
 
 # ---------------------------------------------------------------------------------------------
-# Per-system setups (D-73)
+# Per-system setups
 # ---------------------------------------------------------------------------------------------
 
 
@@ -249,7 +250,7 @@ class Resolution:
     spacing: float | None = None        # bohr; a derivation target on a Coulomb system
     half_box: float | None = None       # bohr of vacuum beyond the outermost nucleus (Coulomb)
     box: float | None = None            # bohr, full edge (model systems only)
-    points_per_edge: int | None = None  # single bare nucleus only (D-42: box-limited)
+    points_per_edge: int | None = None  # single bare nucleus only (box-limited)
     fd_order: int | None = None
     eigen_tol: float | None = None      # EigenConfig.residual_tol
     chebyshev_degree: int | None = None
@@ -278,7 +279,7 @@ _STANDARD = Resolution()
 #: G1.2's measured requirement, so the ladders bracket it. Every spacing divides its scenario's box
 #: edge exactly -- :meth:`cdft.grid.UniformGrid.from_config` re-derives ``h`` from the edge, and a
 #: spacing that does not divide it comes back snapped, which G5.5 reads as an unexplained change.
-#: A Coulomb scenario is immune: D-64 rounds the derived edge up to a whole number of cells.
+#: A Coulomb scenario is immune: its grid rule rounds the derived edge up to whole cells.
 _HARMONIC_LEVELS: Mapping[str, Resolution] = {
     "draft": Resolution(spacing=0.32),
     "standard": _STANDARD,
@@ -286,7 +287,7 @@ _HARMONIC_LEVELS: Mapping[str, Resolution] = {
     "reference": Resolution(spacing=0.125),
 }
 
-#: The infinite well's edge is 10 bohr, so it takes its own divisors (D-73).
+#: The infinite well's edge is 10 bohr, so it takes its own divisors.
 _WELL_LEVELS: Mapping[str, Resolution] = {
     "draft": Resolution(spacing=0.40),
     "standard": _STANDARD,
@@ -294,11 +295,11 @@ _WELL_LEVELS: Mapping[str, Resolution] = {
     "reference": Resolution(spacing=0.10),
 }
 
-#: Bare molecules are spacing-limited and the box is flat from 12 to 24 bohr (A-1), so every level
+#: Bare molecules are spacing-limited and the box is flat from 12 to 24 bohr, so every level
 #: moves the spacing alone. H2+ at R = 2 against the two-centre oracle: 1.8e-3 Ha at h = 0.32,
 #: 1.0e-3 at 0.25, 1.6e-4 at 0.16. The draft target is 0.35 rather than 0.40 because the lattice
 #: rule may round a target up, and above h ~ 0.5 convergence stops being monotone: a scan run there
-#: acquires scatter that reads as structure (A-4).
+#: acquires scatter that reads as structure.
 _MOLECULE_LEVELS: Mapping[str, Resolution] = {
     "draft": Resolution(spacing=0.35),
     "standard": _STANDARD,
@@ -306,7 +307,7 @@ _MOLECULE_LEVELS: Mapping[str, Resolution] = {
     "reference": Resolution(spacing=0.16),
 }
 
-#: Interacting scenarios are interpolation-limited to ~O(h^3) (A-10). He at VWN LDA against NIST:
+#: Interacting scenarios are interpolation-limited to ~O(h^3). He at VWN LDA against NIST:
 #: 2.0e-4 Ha at h = 0.35, 1.7e-5 at 0.25, 5.9e-6 at 0.20 on a 16-bohr box, and the 1e-6 target is
 #: met at h ~ 0.16 -- which needs the box too, hence the raised floor at ``reference`` (box 14 vs
 #: 16 differ by 9e-7). ``half_box`` is a floor: the derived tail margin wins where it is wider.
@@ -319,7 +320,7 @@ _INTERACTING_LEVELS: Mapping[str, Resolution] = {
 
 
 def _nucleus_levels(z: float) -> dict[str, Resolution]:
-    """Levels for a single bare nucleus: a point count and a half-box, never a spacing (D-42).
+    """Levels for a single bare nucleus: a point count and a half-box, never a spacing.
 
     The transformed problem has a constant solution, so refining ``h`` only accumulates round-off
     (4.7e-14 Ha at 21 points, 1.2e-12 at 129) and accuracy is bought with box instead: the

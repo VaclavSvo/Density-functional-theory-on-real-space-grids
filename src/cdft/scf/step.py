@@ -1,12 +1,12 @@
-"""The one-step Kohn--Sham map as a pure function -- :class:`~contract.SCFStepProtocol` (D-49).
+"""The one-step Kohn--Sham map as a pure function -- :class:`~contract.SCFStepProtocol`.
 
 ``step(density, functional)`` builds the Hamiltonian at the input density, diagonalises it and
 returns the output density with the eigenpairs and an energy breakdown. It holds no mixer state and
 mutates nothing, so the same inputs give the same outputs (the eigensolver is seeded from the
 numerics) and the fixed point stays differentiable by implicit differentiation. Mixing and the
-fallback ladder live in :mod:`cdft.scf.loop` and change only the path (D-16).
+fallback ladder live in :mod:`cdft.scf.loop` and change only the path.
 
-The interacting potential in the cusp-factorised frame (D-54): ``n = f^2 rho`` with ``rho`` smooth,
+The interacting potential in the cusp-factorised frame: ``n = f^2 rho`` with ``rho`` smooth,
 and every density integral and potential matrix element goes through
 :class:`~cdft.operators.quadrature.CuspQuadrature`.
 
@@ -17,13 +17,15 @@ and every density integral and potential matrix element goes through
   ``omega~_H / omega``.
 * XC: ``grad n = f^2 (grad rho - 2 rho grad u)`` with ``grad u`` analytic, so no stencil
   differences across the cusp. The GGA potential enters in weak form, so ``-div(2 e_sigma grad n)``
-  is never formed and the ``-0.017/r`` divergence of PBE at a nucleus (D-52 item 3) is integrated
-  rather than sampled.
+  is never formed and the ``-0.017/r`` divergence of PBE at a nucleus is integrated rather than
+  sampled.
 * ``E = sum_i f_i eps_i - E_H - int n v_xc + E_xc + E_ii`` with ``int n v_xc = Q[n e_n + 2 sigma
-  e_sigma]``; ``E_ext`` is reported as the complement (D-52 item 2), the bounded by-parts value
-  beside it.
+  e_sigma]``; ``E_ext`` is reported as the complement, the bounded by-parts value beside
+  it.
 
-Spin-restricted (``n_spin == 1``) in this increment; the arrays already carry the spin axis (D-51).
+Spin-restricted (``n_spin == 1``) for now; the arrays already carry the spin axis.
+
+Design: D-11, D-16, D-44, D-49, D-51, D-52, D-54, D-55 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -131,7 +133,7 @@ class StepGeometry:
         charges: tuple[float, ...],
         positions: torch.Tensor,
     ) -> "StepGeometry":
-        """Compute the tensors for ``grid``, the quadrature's nodes and the nuclei (D-54 split).
+        """Compute the tensors for ``grid``, the quadrature's nodes and the nuclei.
 
         ``positions`` is :func:`~cdft.structure.positions_tensor` in float64 on the grid's device.
         """
@@ -285,7 +287,7 @@ class KohnShamStep:
             virial_scaling = None
             if not needs_sigma:
                 # -int n r.grad v_xc = int v_xc (3 n + r . grad n), Levy-Perdew scaling about the
-                # first nucleus, with grad n from the analytic-gradient form (D-54).
+                # first nucleus, with grad n from the analytic-gradient form.
                 grad_n_grid_lda = q.density_gradient_on_grid(rho)
                 r_node = (q.points - positions[0]).transpose(0, 1)
                 r_grid = (grid.points().to(torch.float64) - positions[0]).transpose(0, 1)
@@ -328,7 +330,7 @@ class KohnShamStep:
         """Run the production eigensolver, seeded from the numerics so the map is deterministic.
 
         Returns the result and, in a separate mapping because the step keeps no state, the stop
-        reason and Ritz drift (G5.5, D-44) plus what the solver filtered with
+        reason and Ritz drift (G5.5) plus what the solver filtered with
         (``eigen_spectral_bounds``, ``eigen_bounds_source``, ``eigen_bounds_shift``,
         ``eigen_top_ritz_fraction``). ``max_iterations``, ``bounds`` (a carried spectral interval)
         and ``graphed_filter`` are path options owned by the caller; ``step`` converges fully.
@@ -337,7 +339,7 @@ class KohnShamStep:
         config = self.numerics.eigen
         if max_iterations is not None:
             config = dataclasses.replace(config, max_iterations=max_iterations)
-        # No Ritz-stability stop inside the SCF (D-55 item 8): the density needs converged
+        # No Ritz-stability stop inside the SCF: the density needs converged
         # eigenvectors, and that criterion stops once the eigenvalues are stable -- from a warm
         # start, after two filter steps whatever the eigenvector residual.
         solver = ChebyshevFilteredSubspace(self.grid, config, ritz_stop=False, graphed_filter=graphed_filter)
@@ -353,7 +355,7 @@ class KohnShamStep:
         return result, info
 
     def occupy(self, eigenvalues: torch.Tensor) -> torch.Tensor:
-        """Aufbau occupations, floats (D-11); the Fermi-level machinery is Increment 4."""
+        """Aufbau occupations, as floats; no Fermi-level smearing yet."""
         return aufbau_occupations(
             eigenvalues.reshape(1, -1).repeat(self.n_spin, 1),
             self.n_electrons,

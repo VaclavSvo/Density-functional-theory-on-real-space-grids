@@ -2,10 +2,12 @@
 
 A gate maps a run, or a component, to a :class:`~contract.GateResult` carrying a verdict, the
 measured value, its threshold and kind, and a citation; gates are evaluated at solve time and travel
-with every record (D-13, G5.3). Conventions: every gate reduces to one non-negative number for which
+with every record. Conventions: every gate reduces to one non-negative number for which
 ``measured <= threshold`` is the universal reading; MARGINAL is a pass above
 :data:`MARGINAL_FRACTION` of the threshold, which flags a record rather than invalidating it; and
 SKIPPED always carries a reason, since a gate that silently does not run looks like one that passed.
+
+Design: D-13 in ``docs/05_DECISION_LOG.md``; the verdict rule is gate G5.3.
 """
 
 from __future__ import annotations
@@ -66,7 +68,7 @@ class GateSpec:
     """
 
     requires_oracle: bool = False
-    """Whether evaluating this gate calls PySCF/libxc (O-24).
+    """Whether evaluating this gate calls PySCF/libxc.
 
     Off by default the runner drops such a gate from the plan and the record, rather than
     reporting SKIPPED on every surface; ``CDFT_ORACLES=1`` or ``--oracles`` restores it. Stored
@@ -95,7 +97,7 @@ def artifact_grid(artifact: RunArtifact, device=None):
 
     A gate that reads a density point by point must place its points where the solver did.
     Re-deriving from the scenario reproduces the shape and spacing but not the origin, since a
-    derived lattice is anchored on the first nucleus (D-64), which shifts every point by up to half
+    derived lattice is anchored on the first nucleus, which shifts every point by up to half
     a cell. A record without the description falls back to the derived grid.
     """
     import torch

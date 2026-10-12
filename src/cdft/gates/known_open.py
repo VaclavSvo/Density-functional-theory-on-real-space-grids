@@ -35,7 +35,7 @@ class KnownOpen:
     scenario_id: str
     gate_id: str
     open_item: str
-    """Identifier of the open item, e.g. ``O-13``. Never blank: without one this is an excuse."""
+    """Identifier of the tracked open item. Never blank: without one this is an excuse."""
 
     recorded: float
     """The measured value when this entry was written."""
@@ -47,14 +47,7 @@ class KnownOpen:
 
 
 #: Every currently-accepted failure. Deliberately short, and shortening it is the work. A retired
-#: row's measurement stays pinned in ``tests/golden/values.json`` under a ``closed.*`` key. The
-#: three molecular G1.13 rows (O-19, C8) were retired by D-75: 2.29e-8 / 2.03e-8 / 2.42e-5 became
-#: 2.7e-9 / 2.9e-9 / 2.9e-9 against the unchanged 1e-8 threshold. The G5.9 row (O-31, recorded 2.0
-#: on a 2-core host) was retired by D-82: the census read the 27 memoised
-#: ``gauss_legendre._rule`` builds -- a CPU computation on every device -- as a loop site; classed
-#: host-side, both probes meet their 2026-09-16 budgets exactly (9/7 and 80/12 reads). The card
-#: host's 4.0 of the same night was recorded without detail; its next full run carries the detail
-#: and decides whether anything remains there.
+#: row's measurement stays pinned in ``tests/golden/values.json`` under a ``closed.*`` key.
 KNOWN_OPEN: tuple[KnownOpen, ...] = (
     KnownOpen(
         scenario_id="h2_R1.4_lda",
@@ -141,7 +134,7 @@ def partition_failures(scenario_id: str, results) -> Partition:
     for result in results:
         if result.verdict.value != "fail":
             continue
-        if result.name == UNEVALUABLE_GATE_NAME:  # the runner's own string (O-26)
+        if result.name == UNEVALUABLE_GATE_NAME:  # the runner's own marker string
             unimplemented += 1
             continue
         kind, entry = classify(scenario_id, result.gate_id, result.measured)

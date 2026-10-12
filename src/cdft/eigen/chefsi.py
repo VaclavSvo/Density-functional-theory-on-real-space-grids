@@ -2,7 +2,10 @@
 
 Matrix-free; the scaled three-term recurrence of [F2] never forms the polynomial. The one bad
 failure mode is a spectral upper bound that does not bound, hence the rigorous Lanczos enclosure
-of ``spectral_bounds``. Rationale: ``docs/03_METHOD.md (Part E)``.
+of ``spectral_bounds``.
+
+Design: D-44, D-55, D-65, D-67, D-68 in ``docs/05_DECISION_LOG.md``; rationale in
+``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -34,8 +37,8 @@ __all__ = [
 ]
 
 #: Reject reused bounds once the top Ritz value reaches this fraction of the enclosing interval,
-#: ``(theta_top - lambda_min) / (lambda_max - lambda_min)`` (D-68): near 1 the "upper bound" may
-#: not bound (the D-44 failure), so Lanczos is rerun at once. Random warm-start padding sits ~0.5.
+#: ``(theta_top - lambda_min) / (lambda_max - lambda_min)``: near 1 the "upper bound" may not bound,
+#: so Lanczos is rerun at once. Random warm-start padding sits ~0.5.
 BOUND_REUSE_RITZ_FRACTION = 0.9
 
 #: Warm-up filter runs on a side stream before a CUDA-graph capture, letting the caching allocator
@@ -103,7 +106,7 @@ def chebyshev_filter(
     for _ in range(2, degree + 1):
         sigma2 = 1.0 / (2.0 / sigma1 - sigma)
         applied = hamiltonian.apply(y)  # type: ignore[attr-defined]
-        # Fused update (D-65); bitwise the unfused expression on the CPU.
+        # Fused update; bitwise the unfused expression on the CPU.
         y_new = chebyshev_update(applied, y, previous, c, 2.0 * sigma2 / e, sigma * sigma2)
         previous, y = y, y_new
         sigma = sigma2
@@ -165,7 +168,7 @@ def _interval_fraction(value: float, low: float, high: float) -> float:
 
 @dataclass(frozen=True)
 class SpectralBoundsHint:
-    """Spectral bounds carried over from the previous SCF iteration (D-68).
+    """Spectral bounds carried over from the previous SCF iteration.
 
     ``shift`` bounds the operator's change, ``max_i |v_new(i) - v_old(i)|`` for a diagonal-potential
     change alone (0-d device tensor, read with the solver's first host read, or a float). By Weyl,
@@ -180,7 +183,7 @@ class SpectralBoundsHint:
 
 
 class GraphedChebyshevFilter:
-    """The Chebyshev filter replayed as a ``torch.cuda.CUDAGraph`` per block shape (D-67).
+    """The Chebyshev filter replayed as a ``torch.cuda.CUDAGraph`` per block shape.
 
     Captures :func:`chebyshev_recurrence` for a fixed block shape and operator geometry; three
     static buffers are refreshed per call (block, potential from ``graph_potential`` so a new SCF
@@ -417,9 +420,9 @@ class ChebyshevFilteredSubspace:
         ``graphed_filter`` (CUDA only) replays the filter as a graph where it can; ``None``
         -- always on the CPU -- calls :func:`chebyshev_filter`.
 
-        ``ritz_stop=False`` disables the weak-form Ritz-stability criterion (D-44), so the filter
-        runs until the residual is below ``residual_tol`` or ``max_iterations`` is reached. The
-        self-consistent loop uses this (D-55 item 8): the Ritz criterion stops with eigenvectors,
+        ``ritz_stop=False`` disables the weak-form Ritz-stability criterion, so the filter runs
+        until the residual is below ``residual_tol`` or ``max_iterations`` is reached. The
+        self-consistent loop uses this: the Ritz criterion stops with eigenvectors,
         and so a density, still carrying a residual of order 1e-6, the SCF's own density tolerance,
         which the loop would then read as an SCF residual.
         """
@@ -498,7 +501,7 @@ class ChebyshevFilteredSubspace:
         stable = 0
         self.eigenvalue_drift = float("inf")
         self.stop_reason = "iteration limit"
-        # Second, weaker criterion -- Ritz values stable -- on the weak-form path ONLY (D-44),
+        # Second, weaker criterion -- Ritz values stable -- on the weak-form path ONLY,
         # where the eigenvalue comes from an exactly symmetric Galerkin matrix and the residual
         # from `apply`, so the two may legitimately disagree by orders. On a collocation operator
         # it is a premature stop reporting "converged". `stop_reason` records which fired (G5.5).
@@ -521,8 +524,8 @@ class ChebyshevFilteredSubspace:
             lower = next_lower
             fraction = _interval_fraction(lower, spectrum_min, spectrum_max)
             if self.bounds_source == "reused" and not fraction < BOUND_REUSE_RITZ_FRACTION:
-                # A carried "upper bound" this close to the subspace may not bound (D-44):
-                # re-estimate rather than filter with it.
+                # A carried "upper bound" this close to the subspace may not bound: re-estimate
+                # rather than filter with it.
                 spectrum_min, spectrum_max = lanczos()
                 self.bounds_source = (
                     f"lanczos (reuse rejected: top Ritz fraction {fraction:.3f} >= "

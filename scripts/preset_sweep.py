@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Measure eigenvalue error against box size and grid spacing, for the preset retune (D-38).
+"""Measure eigenvalue error against box size and grid spacing, for the preset retune.
 
 Run as ``python scripts/preset_sweep.py atoms`` / ``molecules``. Writes a JSON table to
 ``reports/preset_sweep_<leg>.json``. The table, not an argument, is what the retune is derived from.
+Design: D-38 in ``docs/05_DECISION_LOG.md``.
 """
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Cusp-aware quadrature: integrating ``f^2 * (smooth)`` exactly enough on a uniform grid (A-9, C7).
+"""Cusp-aware quadrature: integrating ``f^2 * (smooth)`` exactly enough on a uniform grid.
 
 Integrals are ``integral f^2 g d^3r``, ``f^2 = exp(-2 sum_a Z_a s_a)`` closed form, ``g`` smooth.
 The plain ``h^3`` sum is spectral on ``g`` but ``O((Zh)^4)`` on the cusp (G1.13). Do not patch that
@@ -7,21 +7,24 @@ and is ``O(h^3)`` on a smooth integrand. The seam has to be smooth:
 
     Q[f^2 g] = sum_a Q_sphere,a[ P_a f^2 g ] + sum_i h^3 (1 - sum_a P_a)(r_i) f^2(r_i) g(r_i),
 
-``p_a(r) = (1/2) erfc((s_a - r_c)/w)``, ``P_a = beta_a (1 - prod_b (1 - p_b))`` with the erf cells
-``beta_a`` of D-58 (the weights sum to one exactly). In a sphere ``f^2``, ``grad u``, ``|grad u|^2``
-are analytic at the nodes and ``g`` is interpolated; outside, ``1 - p_a ~ 1e-10`` at the nucleus.
-The plain sum aliases the taper shell at ``exp(-pi^2 w^2/h^2) = 5.7e-8`` of its content (w = 1.3 h);
-a single shell centred on a lattice nucleus cancels that by symmetry (4e-11 measured on H at
-Z h = 1/4), a second centre modulates the shell and does not (2.7e-8 on H2+, the whole of A-11's
-residue), so **overlapping spheres take their mass weights' far part from lumped weights**
-``Q_far[f^2 ell_i]`` on a temporary twice-refined lattice (D-75); the far sums of grid fields keep
-the plain ``h^3`` rule, a cusped ``v_xc`` being uninterpolable.
+``p_a(r) = (1/2) erfc((s_a - r_c)/w)``, ``P_a = beta_a (1 - prod_b (1 - p_b))`` with the erf
+(Becke-type) cells ``beta_a`` (the weights sum to one exactly). In a sphere ``f^2``, ``grad u``,
+``|grad u|^2`` are analytic at the nodes and ``g`` is interpolated; outside, ``1 - p_a ~ 1e-10`` at
+the nucleus. The plain sum aliases the taper shell at ``exp(-pi^2 w^2/h^2) = 5.7e-8`` of its
+content (w = 1.3 h); a single shell centred on a lattice nucleus cancels that by symmetry (4e-11
+measured on H at Z h = 1/4), a second centre modulates the shell and does not (2.7e-8 on H2+), so
+**overlapping spheres take their mass weights' far part from lumped weights** ``Q_far[f^2 ell_i]``
+on a temporary twice-refined lattice; the far sums of grid fields keep the plain ``h^3`` rule, a
+cusped ``v_xc`` being uninterpolable.
 Being linear in the grid values of ``g``, the rule reduces to mass weights ``omega_i`` with
 ``sum_i omega_i g_i = Q[f^2 I[g]]`` -- the eigensolver's measure, and to lumped weights
 ``omega~_i = Q[f^2 v ell_i]`` for ``<a|v|b>`` (interpolating the *product* ``ab``, not the
 factors), so a potential stays a multiplication by ``omega~_i / omega_i`` and needs no mass matrix.
 The GGA term goes by parts onto the interpolant's gradient, so no divergence of a cusped field is
-ever formed (D-52 item 3). Rationale: D-54, D-58, D-75, ``docs/03_METHOD.md`` (Parts B and E).
+ever formed.
+
+Design: D-39, D-42, D-52, D-54, D-58, D-69, D-75 in ``docs/05_DECISION_LOG.md``; rationale in
+``docs/03_METHOD.md`` Parts B and E.
 """
 
 from __future__ import annotations
@@ -44,7 +47,7 @@ from .gauss_legendre import gauss_legendre
 
 __all__ = ["CuspQuadrature", "SphereRule", "hydrogenic_1s_potential", "lagrange_weights", "TRANSPOSE_AS_CSC"]
 
-#: Hold ``L^T`` as the CSC view of ``L`` instead of a second CSR (D-69): halves the operator memory
+#: Hold ``L^T`` as the CSC view of ``L`` instead of a second CSR: halves the operator memory
 #: and skips the SciPy build, bitwise equal on the CPU but ~15x slower there because torch converts
 #: a CSC matrix per call; CUDA cost unmeasured. Part of the geometry-cache key.
 TRANSPOSE_AS_CSC = False
@@ -200,17 +203,18 @@ class CuspQuadrature:
     #: Smallest taper centre, in spacings, before ``w`` and ``r_c`` are scaled down together;
     #: below it the rule degrades towards the plain sum.
     min_centre_in_spacings: float = 3.5
-    #: Largest sphere radius in spacings: D-42's half-box ``16 h`` minus the ``4.5 h`` margin.
+    #: Largest sphere radius in spacings: the derived grids' half-box ``16 h`` minus the ``4.5 h``
+    #: margin.
     max_radius_in_spacings: float = 11.5
     #: Gauss points per radial panel of one spacing.
     radial_order: int = 6
     #: Largest arc between neighbouring angular nodes, in spacings (see :func:`_sphere_rule`).
     node_spacing: float = 1.0
-    #: Angular node spacing for a sphere overlapping another's (D-58): it must then integrate the
+    #: Angular node spacing for a sphere overlapping another's: it must then integrate the
     #: erf cell transition and the neighbour's suppressed cusp, both on the grid scale. 2x nodes.
     node_spacing_overlapping: float = 0.7
     #: Refinement per axis of the temporary lattice the lumped far weights are integrated on when
-    #: spheres overlap (D-75). Measured on H2+: ``far(h/2) - far(h/3)`` is 5e-13 of ``integral f^2``.
+    #: spheres overlap. Measured on H2+: ``far(h/2) - far(h/3)`` is 5e-13 of ``integral f^2``.
     far_refine: int = 2
     #: Within this many spacings of a box face the lumped mass weights blend back to the plain ones
     #: (erf of width ``far_edge_width_in_spacings``): the one-sided stencils there make the lumped
@@ -255,9 +259,9 @@ class CuspQuadrature:
                     f"quadrature needs at least {2.0 * h + margin:.3g} bohr (a two-cell sphere plus "
                     f"a degree-{self.degree} stencil). Enlarge the box."
                 )
-            # Spheres may overlap and contain each other's nucleus (D-58): the Becke cells in
+            # Spheres may overlap and contain each other's nucleus: the Becke cells in
             # _partition_weights hand the region near b to sphere b smoothly. Do not cap the radius
-            # at the internuclear distance -- that squeezes the taper and aliases (A-11, A-3).
+            # at the internuclear distance -- that squeezes the taper and aliases.
             width = self.taper_width_in_spacings * h
             taper_centre = radius_sphere - self.taper_margin * width
             if taper_centre < self.min_centre_in_spacings * h:
@@ -307,7 +311,7 @@ class CuspQuadrature:
 
         grid_points = grid.points().to(self.dtype)
         self.far = self._far_factor(grid_points)
-        # The far rule: the plain h^3 far_i for every integral of a grid field, and (D-75) the lumped
+        # The far rule: the plain h^3 far_i for every integral of a grid field, and the lumped
         # weight Q_far[f^2 ell_i] for the mass weights alone where a taper shell has a neighbour to
         # break its symmetry -- the measure the solver normalises in is then exact to 1e-9, while a
         # potential with its own cusp (v_xc ~ n^{1/3}) cannot be interpolated onto a finer lattice.
@@ -362,7 +366,7 @@ class CuspQuadrature:
         return torch.where(s < sphere.radius_sphere, value, torch.zeros_like(value))
 
     #: Width, in spacings, of the erf transition splitting overlapping spheres on their bisecting
-    #: surface (D-58). Fixed in *space*, not in Becke's ``mu``: the rules resolve h, not the bond.
+    #: surface. Fixed in *space*, not in Becke's ``mu``: the rules resolve h, not the bond.
     cell_width_in_spacings: float = 1.0
 
     def _becke_cells(self, points: torch.Tensor) -> torch.Tensor:
@@ -387,13 +391,13 @@ class CuspQuadrature:
         return cells / cells.sum(dim=0, keepdim=True).clamp_min(1.0e-300)
 
     def _partition_weights(self, points: torch.Tensor, owner: torch.Tensor) -> torch.Tensor:
-        """``P_a = beta_a Q`` at each node of sphere ``a``, ``Q = 1 - prod_b (1 - p_b)`` (D-58).
+        """``P_a = beta_a Q`` at each node of sphere ``a``, ``Q = 1 - prod_b (1 - p_b)``.
 
         ``Q`` is the share taken from the plain sum (complement: :meth:`_far_factor`); the Becke
         cells split it between spheres, so ``sum_a P_a + far = 1`` exactly, every factor is smooth,
         and each sphere's integrand vanishes to high order at any other nucleus it contains.
 
-        The lune (D-75): where a node of sphere ``a`` lies outside sphere ``b``, ``beta_b Q`` has no
+        The lune: where a node of sphere ``a`` lies outside sphere ``b``, ``beta_b Q`` has no
         rule of its own (sphere ``b``'s nodes stop at its radius), so its cell is handed to ``a``:
         ``P_a = Q (beta_a + sum_b beta_b [s_b >= R_b])``. The step is at sphere ``b``'s edge, where
         ``Q = p_b ~ 1e-10``; the mass it recovers is 9e-10 of ``integral f^2`` on H2+ and H2.
@@ -415,7 +419,7 @@ class CuspQuadrature:
         return result
 
     def _lumped_far_weights(self) -> torch.Tensor:
-        """The lumped far mass weights ``Q_far[f^2 ell_i]`` of an overlapping geometry (D-75).
+        """The lumped far mass weights ``Q_far[f^2 ell_i]`` of an overlapping geometry.
 
         The midpoint rule of ``far f^2 ell_i`` on the lattice refined ``far_refine`` times per axis
         over the whole box (``far`` and ``f^2`` analytic at the fine points, the cardinal function
@@ -423,12 +427,12 @@ class CuspQuadrature:
         edge), applied as three one-dimensional transposed interpolations; ``sum_i omega_i g_i =
         Q_far[f^2 I[g]]`` for a grid field ``g``. It serves the mass weights only (``g = 1`` and
         the smooth ``|phi|^2``): a field with a cusp of its own, such as ``v_xc ~ n^{1/3}`` or
-        ``e_xc``, interpolates badly where the taper's inner tail still carries weight and moved
-        the H2 LDA total by 1e-6 Ha when the potentials used these weights, so every other far sum
-        keeps the plain ``h^3 far_i``. Whole box, not a blend around the spheres: a blend ``chi``
-        of grid-scale width is interpolated to 4e-3 by the degree-7 stencil, which costs 7e-9 of
-        ``integral f^2`` on H2+ wherever ``f^2`` is not negligible. The only blend is back to the
-        plain weights within ``far_edge_margin_in_spacings`` of a face.
+        ``e_xc``, interpolates badly where the taper's inner tail still carries weight (it would
+        move the H2 LDA total by 1e-6 Ha if the potentials used these weights), so every other far
+        sum keeps the plain ``h^3 far_i``. Whole box, not a blend around the spheres: a blend
+        ``chi`` of grid-scale width is interpolated to 4e-3 by the degree-7 stencil, which costs
+        7e-9 of ``integral f^2`` on H2+ wherever ``f^2`` is not negligible. The only blend is back
+        to the plain weights within ``far_edge_margin_in_spacings`` of a face.
         """
         grid = self.grid
         h = grid.spacing
@@ -762,7 +766,7 @@ class CuspQuadrature:
         """``grad n = f^2 (grad rho - 2 rho grad u)`` on the grid, ``grad rho`` by finite differences.
 
         The difference acts on the smooth transformed density only; the cusp direction comes from
-        ``grad u`` (cell-averaged at the nucleus, D-39). No stencil differences across the cusp.
+        ``grad u`` (cell-averaged at the nucleus). No stencil differences across the cusp.
         """
         grad_rho = self.grid.gradient(rho)
         f2 = self.factor.weight.to(self.dtype)
@@ -802,7 +806,7 @@ def hydrogenic_1s_potential(charge: float, distance: torch.Tensor) -> torch.Tens
     """Electrostatic potential ``(pi/Z^3) [1 - e^{-2Zs}(1 + Zs)] / s`` of the density ``exp(-2 Z s)``.
 
     Finite limit ``pi / Z^2`` at ``s = 0``; total charge ``pi / Z^3``. Times ``c_a = n(R_a)`` this is
-    the cusp part of the Hartree split ``n = sum_a c_a e^{-2 Z_a s_a} + n_smooth`` (D-54).
+    the cusp part of the Hartree split ``n = sum_a c_a e^{-2 Z_a s_a} + n_smooth``.
     """
     z = float(charge)
     x = z * distance

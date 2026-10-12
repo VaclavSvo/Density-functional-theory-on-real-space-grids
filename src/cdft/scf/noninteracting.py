@@ -1,9 +1,11 @@
 """The non-interacting solve: one diagonalisation of ``T + v_ext``, no self-consistency.
 
 A complete solver for three reference families: the analytic model systems, the one-electron
-all-electron systems of Phase 1 and the non-interacting limit of G1.6. The SCF loop wraps it rather
-than replacing it. Rationale, including why ``E_ext`` is the band-energy complement:
-``docs/03_METHOD.md (Part E)``.
+all-electron systems and the non-interacting limit of G1.6. The SCF loop wraps it rather than
+replacing it.
+
+Design: D-35, D-42, D-44, D-52, D-54 in ``docs/05_DECISION_LOG.md``; rationale, including why
+``E_ext`` is the band-energy complement, in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -88,7 +90,7 @@ def build_hamiltonian(
         # Geometry-only: served by the cache when an earlier solve built them for the same key.
         cache = geometry_cache.lease(grid, charges, positions)
         factor = cache.part("factor", lambda: CuspFactor(grid, charges, positions))
-        # The cusp-aware quadrature (D-54) is the operator's measure, not post-processing, so the
+        # The cusp-aware quadrature is the operator's measure, not post-processing, so the
         # density it normalises is the one the Hamiltonian saw.
         quadrature = cache.part("quadrature", lambda: CuspQuadrature(grid, factor))
         hamiltonian = CuspFactoredHamiltonian(grid, factor, quadrature=quadrature)
@@ -101,7 +103,7 @@ def build_hamiltonian(
 
 
 def _use_cusp_factorisation(scenario: ScenarioSpec) -> bool:
-    """Whether this scenario is solved in the cusp-transformed representation (D-35).
+    """Whether this scenario is solved in the cusp-transformed representation.
 
     True for ``NUCLEAR_COULOMB`` with at least one nucleus and the flag at its default; elsewhere
     the factor would be the identity, so the untransformed operator is used directly.
@@ -125,7 +127,7 @@ def solve_noninteracting(
     """Solve one fixed-potential eigenproblem and return a fully gated artifact.
 
     ``n_states`` defaults to what the electron count needs; ``cross_check`` also runs LOBPCG and
-    records the agreement (G2.5); ``derive_grid`` allows the D-42 Coulomb sizing rule to rewrite
+    records the agreement (G2.5); ``derive_grid`` allows the Coulomb grid-sizing rule to rewrite
     the spacing and the box, and is ``False`` only in the convergence gates G3.1, G3.2 and G3.5,
     whose job is to vary exactly those two; ``device`` defaults to ``numerics.device``.
 
@@ -164,7 +166,7 @@ def solve_noninteracting(
         measurements["eigen_iterations"] = float(result.n_iterations)
         measurements["eigen_eigenvalue_drift"] = float(getattr(solver, "eigenvalue_drift", float("nan")))
         # Which criterion stopped the solver: "converged" alone cannot tell a residual that reached
-        # its tolerance from Ritz values that merely stopped moving (G5.5, D-44).
+        # its tolerance from Ritz values that merely stopped moving (G5.5).
         measurements["eigen_stop_reason"] = str(getattr(solver, "stop_reason", "unrecorded"))
         measurements["divergence_form"] = bool(getattr(hamiltonian, "uses_divergence_form", False))
         # The fused-kernel tier is chosen at the first stencil apply on a device.
@@ -203,9 +205,9 @@ def solve_noninteracting(
             measurements["weight_dynamic_range"] = hamiltonian.measure.dynamic_range
             quadrature = hamiltonian.quadrature
             rho = (occupations[..., None] * orbitals.pow(2)).sum(dim=(0, 1))
-            # G1.13: the rule the solver normalises in (cusp-aware mass weights, D-54) against the
-            # closed form of integral f^2. The plain h^3 value, which misses by ~15 % on derived
-            # atomic grids (A-9), stays recorded beside it.
+            # G1.13: the rule the solver normalises in (cusp-aware mass weights) against the closed
+            # form of integral f^2. The plain h^3 value, which misses by ~15 % on derived atomic
+            # grids, stays recorded beside it.
             exact_weight = hamiltonian.factor.weight_integral_exact()
             plain_weight = hamiltonian.factor.weight_integral_grid()
             grid_weight = float(quadrature.mass_weights.sum())
@@ -232,7 +234,7 @@ def solve_noninteracting(
                 hamiltonian, hamiltonian.measure, n_vectors=16, generator=generator
             )
             # Charge in the solver's own measure (round-off by construction) and in the plain rule
-            # (the A-9 defect, kept visible).
+            # (its ~15 % defect on derived atomic grids, kept visible).
             charge_quadrature = float((quadrature.mass_weights * rho).sum())
             measurements["charge_error"] = abs(charge_quadrature - n_electrons)
             measurements["charge_error_plain"] = abs(float(grid.integrate(density.sum(dim=0))) - n_electrons)
@@ -251,7 +253,7 @@ def solve_noninteracting(
         band = float((occupations * eigenvalues).sum())
 
         # The electronic total is exactly the band energy here, so E_ext is its complement. The
-        # direct value beside it is the bounded by-parts integral of D-54 on the cusp-factorised
+        # direct value beside it is the bounded by-parts integral on the cusp-factorised
         # path (no 1/r pole is sampled), the plain sum of n v_ext otherwise.
         if not transformed:
             measurements["external_direct"] = float(grid.integrate(density.sum(dim=0) * v_ext))

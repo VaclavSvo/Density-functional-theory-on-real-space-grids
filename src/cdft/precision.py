@@ -3,10 +3,11 @@
 Specified: float32 on the hot path (GPU only), float64 unconditionally for the Gram matrix,
 orthonormalisation, the Rayleigh--Ritz subspace, every energy integral and the convergence test.
 :class:`~contract.PrecisionConfig` refuses to relax the float64 stages. The float32 hot path
-(D-60) is not wired yet: every stage runs in float64 on every device and :func:`hot_dtype` says so.
+is not wired yet: every stage runs in float64 on every device and :func:`hot_dtype` says so.
 Also the device seams -- seeded random start, determinism, CSR index dtype, peak memory, the
 provenance device block, the CUDA allocator setting (set at import) and the
-:mod:`cdft.device_policy` hooks. Rationale: ``docs/03_METHOD.md (Part E)``.
+:mod:`cdft.device_policy` hooks. Design: D-60, D-62, D-65 to D-69 in ``docs/05_DECISION_LOG.md``;
+rationale in ``docs/03_METHOD.md (Part E)``.
 """
 
 from __future__ import annotations
@@ -57,8 +58,8 @@ __all__ = [
     "ENV_ALLOC_CONF",
 ]
 
-#: The CUDA caching-allocator setting this package asks for (D-69): expandable segments let a
-#: segment grow in place instead of stranding freed blocks (the cause of a 1.34 GiB OOM).
+#: The CUDA caching-allocator setting this package asks for: expandable segments let a segment
+#: grow in place instead of stranding freed blocks, which otherwise fragments memory into OOM.
 CUDA_ALLOC_CONF = "expandable_segments:True"
 
 #: Where torch's CUDA allocator reads its configuration, once, at the first CUDA allocation.
@@ -97,18 +98,18 @@ ENV_CSR_INT64 = "CDFT_CSR_INT64"
 ENV_DETERMINISTIC_WARN_ONLY = "CDFT_DETERMINISTIC_WARN_ONLY"
 
 
-#: ``CDFT_CUDA_GRAPHS=0`` switches off the CUDA-graph replay of the Chebyshev filter (D-67).
+#: ``CDFT_CUDA_GRAPHS=0`` switches off the CUDA-graph replay of the Chebyshev filter.
 #: Default on for CUDA, never consulted on the CPU (always the eager recurrence). The outcome goes
 #: into ``measurements["cuda_graphs"]`` (G5.5).
 ENV_CUDA_GRAPHS = "CDFT_CUDA_GRAPHS"
 
 #: ``CDFT_LANCZOS_REUSE=0`` makes every SCF iteration run a fresh Lanczos bound estimate instead
-#: of reusing the previous one (D-68). Default on, every device; each iteration's choice goes into
+#: of reusing the previous one. Default on, every device; each iteration's choice goes into
 #: ``measurements["lanczos_bound_history"]``.
 ENV_LANCZOS_REUSE = "CDFT_LANCZOS_REUSE"
 
-#: Two further switches live with their subjects: ``CDFT_GEOMETRY_CACHE`` (D-66) at
-#: :data:`cdft.operators.geometry_cache.ENV_GEOMETRY_CACHE` and ``CDFT_FUSED`` (D-65) at
+#: Two further switches live with their subjects: ``CDFT_GEOMETRY_CACHE`` at
+#: :data:`cdft.operators.geometry_cache.ENV_GEOMETRY_CACHE` and ``CDFT_FUSED`` at
 #: :data:`cdft.operators.fused.ENV_FUSED`.
 
 
@@ -153,7 +154,7 @@ def set_cuda_graphs_allowed(allowed: bool) -> None:
 def set_trsm_chunk(chunk: int) -> None:
     """Set :data:`CUDA_TRSM_CHUNK` from the derived device policy; CUDA only.
 
-    Chunking is bitwise identical to the unchunked solve (D-62), so the width changes time, never a
+    Chunking is bitwise identical to the unchunked solve, so the width changes time, never a
     number. A non-positive value is refused: the CPU policy's ``0`` is never applied.
     """
     global CUDA_TRSM_CHUNK
@@ -254,7 +255,7 @@ def seeded_randn(
     Every seeded random start in the solver goes through here. Draw on the generator's own device
     (the CPU for every generator this code creates), then ``.to(device)``: a CUDA generator draws a
     different stream from the same seed, so drawing on the CPU is what keeps a CPU run and a GPU
-    run bit-identical (D-60). Do not replace this with ``torch.randn(..., device=...)``.
+    run bit-identical. Do not replace this with ``torch.randn(..., device=...)``.
     """
     source = generator.device if generator is not None else torch.device("cpu")
     size = (shape,) if isinstance(shape, int) else tuple(shape)
@@ -282,7 +283,7 @@ def host_floats(*values: torch.Tensor | float) -> list[float]:
     return torch.cat(parts).tolist()
 
 
-#: Largest number of right-hand sides per cuBLAS ``trsm`` call on CUDA (D-62). Above roughly 2^19
+#: Largest number of right-hand sides per cuBLAS ``trsm`` call on CUDA. Above roughly 2^19
 #: right-hand sides cuBLAS falls off a 5000x performance cliff; chunking at 2^18 stays below it and
 #: is bitwise identical, each column being an independent forward substitution.
 CUDA_TRSM_CHUNK = 2**18
@@ -401,7 +402,7 @@ def device_record(device: torch.device) -> dict[str, str]:
 def hot_dtype(config: PrecisionConfig, device: torch.device) -> torch.dtype:
     """Return the dtype the hot path actually runs in: float64 on every device, for now.
 
-    ``config.hot_path`` is not wired (D-60); returning it here would make G5.1 provenance claim
+    ``config.hot_path`` is not wired yet; returning it here would make G5.1 provenance claim
     float32 for a float64 run. The CPU stays float64 regardless -- it is the audit path of G2.10.
     """
     return torch.float64

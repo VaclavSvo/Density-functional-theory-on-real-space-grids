@@ -5,9 +5,11 @@
     A phi = -1/2 lap(phi) + (grad u) . grad(phi) - 1/2 |grad u|^2 phi,   u = sum_a Z_a |r - R_a|
 
 ``A`` and ``H`` share a spectrum (G1.12) and ``A`` is self-adjoint in the weighted measure
-``w = f^2`` (G0.12). With no nuclei the transform is the identity. Derivation and why the cell
-averaging in :meth:`CuspFactor._build_potential` is not optional: D-32, D-35,
-``docs/03_METHOD.md`` (Parts B and E).
+``w = f^2`` (G0.12). With no nuclei the transform is the identity. The cell averaging in
+:meth:`CuspFactor._build_potential` is not optional; its docstring says why.
+
+Design: D-32, D-35 in ``docs/05_DECISION_LOG.md``; derivation in ``docs/03_METHOD.md`` Parts B
+and E.
 """
 
 from __future__ import annotations
@@ -220,7 +222,7 @@ class CuspFactor:
             (pi R^3 / 4) e^{-a} [ 2 (1/a + 2/a^2 + 2/a^3) - 2/(3 a) ].
 
         G1.13 uses it to measure how far the plain ``h^3`` rule is from integrating the cusp weight
-        exactly -- the error every density integral on this path inherits (A-9).
+        exactly -- the error every density integral on this path inherits.
         """
         if self.is_identity:
             return None
@@ -237,7 +239,7 @@ class CuspFactor:
         return None
 
     def weight_integral_grid(self) -> float:
-        """Return the plain ``h^3`` quadrature of the stored weight, the rule the solver uses today."""
+        """Return the plain ``h^3`` quadrature of the stored weight, the rule the solver uses."""
         return float(self.grid.integrate(self._weight))
 
     def weight_integral_outside_box(self) -> float:

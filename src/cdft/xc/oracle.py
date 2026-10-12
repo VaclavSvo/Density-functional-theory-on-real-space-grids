@@ -1,4 +1,4 @@
-"""libxc as a pointwise oracle, reached through PySCF -- **never imported by the solver** (D-05).
+"""libxc as a pointwise oracle, reached through PySCF -- **never imported by the solver**.
 
 G0.6 asks whether a native functional reproduces libxc [I1] to 1e-10 at random points. This is the
 only place libxc is called, and only the gate and the tests import it; a static check in
@@ -10,6 +10,8 @@ Conversions to the contract's conventions happen here: libxc returns the energy 
 ``(n_spin, n_pts)`` and ``(3, n_pts)``. Inputs are ``sigma`` and ``tau``, from which a gradient
 along ``x`` of magnitude ``sqrt(sigma_ss)`` is built, ``sigma_ud`` entering as the angle between
 the two spin gradients.
+
+Design: D-05 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

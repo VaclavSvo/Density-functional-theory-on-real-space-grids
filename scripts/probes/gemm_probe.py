@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Isolate the Rayleigh--Ritz cliff at 2^19 points on the GPU (H4).
+"""Isolate the Rayleigh--Ritz cliff at 2^19 points on the GPU.
 
     python scripts/probes/gemm_probe.py        # every op, every size, three cuBLAS workspace settings
 

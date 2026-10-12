@@ -2,13 +2,13 @@
 
 Runs scenarios against a numerics configuration, evaluates the gates, writes the HDF5 corpus, prints
 the tables, and **exits non-zero if anything failed** (gate G5.6) -- which is what makes an
-unattended run supervisable.
+unattended run supervisable. Design: D-45, D-57, D-73 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
 
-# Path bootstrap: this file is canonical at the repository root next to ``contract.py`` (D-57), so
-# the three "what and how" modules import without the package being installed.
+# Path bootstrap: this file is canonical at the repository root next to ``contract.py``, so the
+# three "what and how" modules import without the package being installed.
 import pathlib as _pathlib
 import sys as _sys
 
@@ -83,7 +83,7 @@ def _announcing(
 
 
 def oracles_line(mode: str) -> str:
-    """The one line every report starts with: whether the PySCF/libxc oracles were on (O-24)."""
+    """The one line every report starts with: whether the PySCF/libxc oracles were on."""
     if mode == "on":
         return f"oracles: on ({ENV_ORACLES}=1 or --oracles): G0.6 and the libxc tests are evaluated"
     return (
@@ -102,8 +102,8 @@ def run_scenarios(
 ) -> tuple[int, str]:
     """Run scenarios and their gates, returning ``(exit_code, report_text)``.
 
-    Separate from :func:`main` so the increment logs and the test suite call exactly what the command
-    line calls, rather than something that resembles it.
+    Separate from :func:`main` so scripts and the test suite call exactly what the command line
+    calls, rather than something that resembles it.
 
     ``numerics`` is what the component gates run at, and what every scenario runs at unless
     ``numerics_for_scenario`` gives one its own ``(numerics, grid rule targets)``
@@ -139,8 +139,8 @@ def run_scenarios(
             title += f"  error={artifact.error_message}"
         sections.append(format_report(artifact.gates.results, title))
 
-        # A record is INVALID for three different reasons and only one is a defect; treating INVALID
-        # alone as the exit condition once reported FAILED on runs where every gate passed (D-45).
+        # A record is INVALID for three different reasons and only one is a defect, so INVALID alone
+        # is not the exit condition: that would report FAILED on runs where every gate passed.
         split = partition_failures(scenario_id, artifact.gates.results)
         known_rows.extend(split.rows)
         if split.new or artifact.status in (RunStatus.ERROR, RunStatus.UNCONVERGED):

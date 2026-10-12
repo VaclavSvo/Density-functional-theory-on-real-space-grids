@@ -1,8 +1,9 @@
 """High-order central finite differences: weights, and their application to a padded box.
 
-The discretisation of D-03. Weights are solved in exact rational arithmetic rather than transcribed,
-and nothing here imports ``torch.nn`` (gate G5.7 forbids it). Rationale:
-``docs/03_METHOD.md (Part E)``.
+Weights are solved in exact rational arithmetic rather than transcribed, and nothing here imports
+``torch.nn`` (gate G5.7 forbids it).
+
+Design: D-03 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations

@@ -1,0 +1,110 @@
+{
+  "he_lda": {
+    "label": "He, LDA (VWN), 16-bohr box vs NIST SRD 141",
+    "reference": -2.834836,
+    "reference_source": "NIST SRD 141, He/lda/total_energy",
+    "quantity": "total energy",
+    "rungs": [
+      {
+        "h": 0.5,
+        "box": 16.0,
+        "n_points": 35937,
+        "value": -2.830936240732186,
+        "error": 0.0038997592678140514,
+        "scf_iterations": 13,
+        "wall_seconds": 19.9
+      },
+      {
+        "h": 0.4,
+        "box": 16.0,
+        "n_points": 68921,
+        "value": -2.8342984631327397,
+        "error": 0.0005375368672604353,
+        "scf_iterations": 12,
+        "wall_seconds": 24.5
+      },
+      {
+        "h": 0.32,
+        "box": 16.0,
+        "n_points": 132651,
+        "value": -2.8347499578921598,
+        "error": 8.604210784035615e-05,
+        "scf_iterations": 13,
+        "wall_seconds": 44.7
+      },
+      {
+        "h": 0.25,
+        "box": 16.0,
+        "n_points": 274625,
+        "value": -2.8348195294207272,
+        "error": 1.6470579272898078e-05,
+        "scf_iterations": 13,
+        "wall_seconds": 109.5
+      },
+      {
+        "h": 0.2,
+        "box": 16.0,
+        "n_points": 531441,
+        "value": -2.834830140859734,
+        "error": 5.859140266295526e-06,
+        "scf_iterations": 14,
+        "wall_seconds": 269.7
+      }
+    ]
+  },
+  "h2plus_R2": {
+    "label": "H\u2082\u207a, R = 2 bohr, bare nuclei vs the two-centre oracle",
+    "reference": -1.1026342166790812,
+    "reference_source": "prolate-spheroidal two-centre solver (cdft.reference.two_centre)",
+    "quantity": "electronic ground-state eigenvalue",
+    "rungs": [
+      {
+        "h": 0.5,
+        "n_points": 24389,
+        "value": -1.103255491262475,
+        "error": -0.0006212745833937827,
+        "wall_seconds": 2.246654751999813
+      },
+      {
+        "h": 0.4,
+        "n_points": 46656,
+        "value": -1.1026678393653875,
+        "error": -3.3622686306244987e-05,
+        "wall_seconds": 4.597083996000038
+      },
+      {
+        "h": 0.3333333333333333,
+        "n_points": 79507,
+        "value": -1.102628758342685,
+        "error": 5.458336396202412e-06,
+        "wall_seconds": 7.082396957000128
+      },
+      {
+        "h": 0.25,
+        "n_points": 185193,
+        "value": -1.1026281539509817,
+        "error": 6.062728099553993e-06,
+        "wall_seconds": 13.133837953999773
+      },
+      {
+        "h": 0.2,
+        "n_points": 357911,
+        "value": -1.1026309339340887,
+        "error": 3.282744992505471e-06,
+        "wall_seconds": 31.39345122099985
+      },
+      {
+        "h": 0.16666666666666666,
+        "n_points": 614125,
+        "value": -1.1026322390696202,
+        "error": 1.977609461079055e-06,
+        "wall_seconds": 61.10360492899963
+      }
+    ]
+  },
+  "provenance": {
+    "torch": "2.14.0+cu130",
+    "threads": 2,
+    "device": "cpu"
+  }
+}

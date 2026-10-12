@@ -27,6 +27,9 @@ forces              ``(n_atoms, 3)``                      Hartree / bohr
 Hartree atomic units throughout: energies in Hartree, lengths in bohr, forces in Hartree/bohr;
 conversion happens only at the configuration and reporting boundaries, via :mod:`cdft.constants`.
 Reference tags such as ``[C3]`` resolve in ``docs/00_LITERATURE_SURVEY.md``.
+
+Design: D-03, D-06, D-10, D-16, D-17, D-20, D-23, D-30, D-35, D-37, D-47, D-49, D-51 in
+``docs/05_DECISION_LOG.md``; per-version changes in the :data:`CONTRACT_VERSION` history below.
 """
 
 from __future__ import annotations
@@ -50,7 +53,7 @@ else:  # torch is a hard runtime dependency of the solver, but the contract stay
 # cross to a downstream project: the corpus (CORPUS_LAYOUT, SCAN_LAYOUT), XCFunctionalProtocol (a
 # pure evaluate, no fit/train/parameters) and NonlocalFeatureProtocol with its adjoint.
 #
-# Only one differentiability is owed (D-47): inside the functional, where v_xc comes from autograd
+# Only one differentiability is owed: inside the functional, where v_xc comes from autograd
 # (gate G0.5). Through the SCF is downstream work; this repository owes only SCFStepProtocol, the
 # fixed-point map kept extractable so implicit differentiation can be added later.
 
@@ -137,7 +140,7 @@ __all__ = [
 #: 1.4.0  D-37 ``GateVerdict.DEFERRED`` as a first-class verdict; D-42 derived grid fields.
 #: 1.5.0  D-49 :class:`ComponentGateProtocol`; :class:`SCFStepProtocol` (D-47).
 #: 1.6.0  :class:`Provenance` gains the device block (gate G5.1); additive, every field defaulted.
-#: 1.6.1  O-29 :class:`InversionProtocol` loses the ``gate_id`` / ``evaluate`` pair copied from
+#: 1.6.1  :class:`InversionProtocol` loses the ``gate_id`` / ``evaluate`` pair copied from
 #:        :class:`ComponentGateProtocol`; no record field changes.
 CONTRACT_VERSION = "1.6.1"
 
@@ -177,7 +180,7 @@ class NonlocalFeatureKind(str, Enum):
 
     Semi-local ingredients cannot remove one-electron self-interaction. ``CIDER_GAUSSIAN`` is the
     affordable alternative to exact exchange: the density convolved with exp[-(a+b) r^2] over a
-    density- and tau-dependent length scale [C26], [C27], one FFT pair per fixed exponent (D-03).
+    density- and tau-dependent length scale [C26], [C27], one FFT pair per fixed exponent.
     """
 
     NONE = "none"
@@ -212,7 +215,7 @@ class BoundaryMode(str, Enum):
 
 
 class ExternalPotentialKind(str, Enum):
-    """Source of the external potential v_ext (D-23).
+    """Source of the external potential v_ext.
 
     ``NUCLEAR_COULOMB`` is the all-electron path: a bare -Z/r per nucleus, one-electron eigenvalues
     -Z^2 / (2 n^2) exactly (gate G4.8), energies comparable with published all-electron values (gate
@@ -231,7 +234,7 @@ class ExternalPotentialKind(str, Enum):
 
 
 class InversionKind(str, Enum):
-    """Method used to recover the Kohn--Sham potential from a reference density (D-17).
+    """Method used to recover the Kohn--Sham potential from a reference density.
 
     ``EXACT_ONE_ORBITAL`` is exact to discretisation error: with one occupied orbital
     psi = sqrt(n / N), so v follows in closed form. ``WU_YANG`` [G1] and ``ZMP`` [G2] are the
@@ -271,7 +274,7 @@ class EigensolverKind(str, Enum):
 
 
 class OccupationScheme(str, Enum):
-    """How occupations are assigned; ``FIXED`` is the default, smearing [F18]-[F20] awaits D-51."""
+    """How occupations are assigned; ``FIXED`` is the default, smearing [F18]-[F20] not yet wired."""
 
     FIXED = "fixed"
     FRACTIONAL = "fractional"
@@ -305,7 +308,7 @@ class RunStatus(str, Enum):
     """Verdict attached to every corpus record.
 
     A failed gate makes a record ``INVALID``, excluded by the default corpus iterator (gate G5.4).
-    ``DEFERRED`` means a named gate this build cannot evaluate: excluded too, reported apart (D-37).
+    ``DEFERRED`` means a named gate this build cannot evaluate: excluded too, reported apart.
     """
 
     VALID = "valid"
@@ -325,7 +328,7 @@ class GateVerdict(str, Enum):
     """Outcome of a single gate.
 
     ``MARGINAL`` passed within 10 percent of the threshold; ``SKIPPED`` does not apply and says why;
-    ``DEFERRED`` applies but is unevaluable here, and names the increment that will supply it.
+    ``DEFERRED`` applies but is unevaluable here, and names what will supply it.
     """
 
     PASS = "pass"
@@ -560,8 +563,8 @@ class ExternalPotentialSpec:
     ``omega`` is the ``HARMONIC`` frequency, exact spectrum (n + 3/2) omega (gate G1.2);
     ``box_length`` the ``PARTICLE_IN_BOX`` edge L in bohr, exact spectrum
     pi^2 (nx^2 + ny^2 + nz^2) / (2 L^2) (gate G1.3); ``depth`` (Ha) and ``width`` (bohr) shape the
-    ``GAUSSIAN_WELL``. ``cusp_factorisation`` solves for phi in psi = exp(-sum_a Z_a |r - R_a|) phi
-    (D-35), removing the nuclear cusp analytically on the Coulombic kinds and a no-op elsewhere; it
+    ``GAUSSIAN_WELL``. ``cusp_factorisation`` solves for phi in psi = exp(-sum_a Z_a |r - R_a|) phi,
+    removing the nuclear cusp analytically on the Coulombic kinds and a no-op elsewhere; it
     is on by default, turning an O(h) error into one limited only by the box (hydrogen 1.05e-2 ->
     2.35e-6 Ha) for twice the stencil work (gate G1.12).
     """
@@ -598,7 +601,7 @@ class ElectronSpec:
     A total charge plus an integer multiplicity cannot express the flat-plane surface E(N, M) of
     [A23]. ``n_electrons`` may be fractional, ``None`` deriving it from the atomic numbers or the
     valence charges minus :attr:`AtomicStructure.charge`; ``magnetisation`` is M = N_up - N_down and
-    needs ``spin_polarised``, which sets the spin axis to extent 2 (v1 floor: 1, D-10).
+    needs ``spin_polarised``, which sets the spin axis to extent 2 (v1 need only support extent 1).
     """
 
     n_electrons: float | None = None
@@ -623,7 +626,7 @@ class ElectronSpec:
 
 @dataclass(frozen=True, slots=True)
 class InversionSpec:
-    """How to recover v_KS and v_xc from a reference density (D-17).
+    """How to recover v_KS and v_xc from a reference density.
 
     ``regularisation`` is the smoothness penalty of [G4]: ignored by ``EXACT_ONE_ORBITAL``, and
     mandatory above zero for the iterative methods, where an unregularised solution oscillates on
@@ -850,7 +853,7 @@ class SCFResult:
 
 @dataclass(slots=True)
 class Diagnostic:
-    """A measured physical quantity that is recorded but never thresholded (D-20).
+    """A measured physical quantity that is recorded but never thresholded.
 
     A gate asserts that the solver is correct; a diagnostic measures how a *functional* behaves,
     where the interesting values are the wrong ones. ``per_point`` holds the grid-resolved form,
@@ -1188,10 +1191,10 @@ class MixerProtocol(Protocol):
 
 @runtime_checkable
 class SCFStepProtocol(Protocol):
-    """One application of the self-consistency map, as a pure function (D-47).
+    """One application of the self-consistency map, as a pure function.
 
     The density is a fixed point ``n* = F(n*)``; mixing, damping and the fallback ladder change only
-    the *path* to it (D-06, D-16) and do not enter ``(I - dF/dn) dn*/dtheta = dF/dtheta``, so the
+    the *path* to it and do not enter ``(I - dF/dn) dn*/dtheta = dF/dtheta``, so the
     map lives apart from the loop that iterates it: no mixer state, no in-place mutation.
     """
 
@@ -1247,7 +1250,7 @@ class GateProtocol(Protocol):
 
 @runtime_checkable
 class ComponentGateProtocol(Protocol):
-    """A gate on an operator at a numerics configuration rather than on a run (D-30, D-49)."""
+    """A gate on an operator at a numerics configuration rather than on a run."""
 
     @property
     def gate_id(self) -> str:
@@ -1259,7 +1262,7 @@ class ComponentGateProtocol(Protocol):
 
 @runtime_checkable
 class InversionProtocol(Protocol):
-    """Recovers v_KS and v_xc from a given density (D-17); see ``potentials/v_xc_inverted``."""
+    """Recovers v_KS and v_xc from a given density; see ``potentials/v_xc_inverted``."""
 
     @property
     def kind(self) -> InversionKind:
@@ -1282,7 +1285,7 @@ class InversionProtocol(Protocol):
 
 @runtime_checkable
 class DiagnosticProtocol(Protocol):
-    """A measurement of how a *functional* behaves, recorded with no threshold (D-20)."""
+    """A measurement of how a *functional* behaves, recorded with no threshold."""
 
     @property
     def diagnostic_id(self) -> str:

@@ -1,8 +1,10 @@
 """The gate runner: evaluates the suite, attaches the report, and sets the record's status.
 
-Gates run at solve time and travel with the data (D-13). A gate a scenario names and the suite does
-not evaluate is a failure, not an omission. Gates that call an oracle (``GateSpec.requires_oracle``)
-are off the plan and the record unless the oracles are requested; the record says which (O-24).
+Gates run at solve time and travel with the data. A gate a scenario names and the suite does not
+evaluate is a failure, not an omission. Gates that call an oracle (``GateSpec.requires_oracle``) are
+off the plan and the record unless the oracles are requested; the record says which.
+
+Design: D-13, D-37 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -88,7 +90,7 @@ __all__ = [
 ]
 
 #: Result name of a FAIL for a gate a scenario names that this build cannot evaluate; the one
-#: string ``known_open.partition_failures`` matches, so ``unimplemented`` is reachable (O-26).
+#: string ``known_open.partition_failures`` matches, so ``unimplemented`` is reachable.
 UNEVALUABLE_GATE_NAME = "gate named by scenario cannot be evaluated"
 
 
@@ -160,7 +162,7 @@ def default_component_gates() -> tuple[ComponentGate, ...]:
 
 
 def planned(gates, oracles: bool):
-    """Return ``gates`` without the oracle-backed ones when ``oracles`` is off (O-24)."""
+    """Return ``gates`` without the oracle-backed ones when ``oracles`` is off."""
     return tuple(gate for gate in gates if oracles or not gate.spec.requires_oracle)
 
 
@@ -185,7 +187,7 @@ class GateSuite:
         oracles:
             Whether gates with ``requires_oracle`` are on the plan; ``None`` reads
             ``CDFT_ORACLES`` (:func:`cdft.reference.oracles_enabled`, default off). Off, they
-            are dropped from the plan and the record, not reported SKIPPED (O-24).
+            are dropped from the plan and the record, not reported SKIPPED.
         """
         self.oracles = oracles_enabled() if oracles is None else bool(oracles)
         artifact_gates = artifact_gates if artifact_gates is not None else default_artifact_gates()
@@ -251,8 +253,8 @@ class GateSuite:
                     )
                 )
                 continue
-            # Three distinct cases, kept apart: collapsing them into one FAIL leaves a reader unable
-            # to tell an expected red row from a real one (D-37).
+            # Deferred, out of scope, and unknown are kept apart: collapsing them into one FAIL
+            # leaves a reader unable to tell an expected red row from a real one.
             owner = deferral_owner(gate_id)
             if owner is not None:
                 entry = by_id(gate_id)

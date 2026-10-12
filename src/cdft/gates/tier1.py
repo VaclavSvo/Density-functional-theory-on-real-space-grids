@@ -1,4 +1,7 @@
-"""Tier 1 -- exact physical limits: each gate compares against a code-independent closed form."""
+"""Tier 1 -- exact physical limits: each gate compares against a code-independent closed form.
+
+Design: D-05, D-32, D-35, D-41, D-42, D-52, D-55, D-64 in ``docs/05_DECISION_LOG.md``.
+"""
 
 from __future__ import annotations
 
@@ -220,8 +223,8 @@ class CuspWeightQuadratureGate(ArtifactGate):
     """G1.13 -- quadrature of the cusp weight ``f^2`` against its closed form; 1e-8 relative.
 
     Closed forms: ``pi / Z^3`` for one centre, prolate-spheroidal for two equal charges; the tail
-    outside the box is subtracted first (D-55 item 6). Other geometries SKIP. Threshold is what a
-    cell-by-cell quadrature delivers; the plain ``h^3`` rule fails it, known-open against A-9.
+    outside the box is subtracted first. Other geometries SKIP. Threshold is what a cell-by-cell
+    quadrature delivers; the plain ``h^3`` rule fails it.
     """
 
     spec = GateSpec(
@@ -257,12 +260,12 @@ class CuspWeightQuadratureGate(ArtifactGate):
 
 
 class KatoCuspGate(ArtifactGate):
-    """G1.11 -- fitted ``d(ln n)/dr`` at the nucleus against Kato's ``-2Z``; 0.10 relative (D-32).
+    """G1.11 -- fitted ``d(ln n)/dr`` at the nucleus against Kato's ``-2Z``; 0.10 relative.
 
     ``ln n`` is fitted over a shell from half a spacing out -- the on-site point carries the
     cell-averaged potential -- to three spacings, before the exponential stops dominating. SKIPs
     with fewer than 8 points in the window, and for rung >= 2, where a diverging ``v_xc`` makes
-    ``-2Z`` false for the converged density (D-52 item 3; D-55).
+    ``-2Z`` false for the converged density.
     """
 
     spec = GateSpec(
@@ -292,7 +295,7 @@ class KatoCuspGate(ArtifactGate):
 
         interacting = is_interacting(artifact.scenario)
         # The grid the run recorded, not one re-derived: a derived lattice is anchored on the first
-        # nucleus (D-64), so a rebuild would read the density half a cell from where it lives.
+        # nucleus, so a rebuild would read the density half a cell from where it lives.
         grid = artifact_grid(artifact, artifact_device(artifact))
         charges = nuclear_charges(artifact.scenario.structure, artifact.scenario.external)
         positions = positions_tensor(artifact.scenario.structure, device=grid.device)
@@ -324,11 +327,11 @@ class KatoCuspGate(ArtifactGate):
         r_window = radius[window].to(torch.float64)
         log_n = torch.log(total[window].to(torch.float64))
         # Quadratic fit ln n = a + b r + c r^2; the cusp is b. A linear fit reads the curvature of a
-        # self-consistent density as slope (D-55); for a bare one-electron atom both agree.
+        # self-consistent density as slope; for a bare one-electron atom both agree.
         # The quadratic needs four distinct radii, else it fits the lattice shells rather than the
         # density, so a window capped by a neighbour falls back to linear and the result says so.
         # Shells are counted at a tenth of a spacing: a nucleus a few thousandths of a bohr off the
-        # lattice (O-23) splits each shell into a near-collinear cluster of radii.
+        # lattice splits each shell into a near-collinear cluster of radii.
         distinct_radii = int(torch.unique(torch.round(r_window / (0.1 * h))).numel())
         fit_degree = 2 if distinct_radii >= 4 else 1
         offsets = artifact.measurements.get("nucleus_offgrid_bohr", []) if artifact.measurements else []
@@ -447,8 +450,8 @@ class RadialReferenceGate(ArtifactGate):
     """G4.8 -- the 3-D solver against an independent radial solution; 1.5936e-3 Ha (chemical).
 
     The oracle separates the physics rather than discretising it in three dimensions, resolves the
-    cusp on a logarithmic grid -- so it checks the transform of D-35 without using it -- and
-    diagonalises directly. SKIPs if the oracle is unavailable, declines or fails to converge (D-05).
+    cusp on a logarithmic grid -- so it checks the cusp transform without using it -- and
+    diagonalises directly. SKIPs if the oracle is unavailable, declines or fails to converge.
     """
 
     spec = GateSpec(
@@ -585,13 +588,13 @@ class RadialReferenceGate(ArtifactGate):
 
 
 class TwoCentreReferenceGate(ArtifactGate):
-    """G4.9 -- the 3-D solver against a prolate-spheroidal two-centre solution; 2.5e-3 Ha (D-41).
+    """G4.9 -- the 3-D solver against a prolate-spheroidal two-centre solution; 2.5e-3 Ha.
 
     :mod:`cdft.reference.two_centre` separates the problem, handles both cusps analytically -- so
-    the transform of D-35 is not used to check itself -- and closes the eigenvalue by a Wronskian
-    root find; it reproduces Madsen and Peek (1971) to 2.2e-9 Ha at R = 2. The threshold sits above
-    the known multi-centre error (1.0e-3 Ha at R = 2, 2.0e-3 at R = 1.4; D-42, O-13) and tightens
-    with it. SKIPs when the oracle declines the geometry.
+    the cusp transform is not used to check itself -- and closes the eigenvalue by a Wronskian root
+    find; it reproduces Madsen and Peek (1971) to 2.2e-9 Ha at R = 2. The threshold sits above the
+    known multi-centre error (1.0e-3 Ha at R = 2, 2.0e-3 at R = 1.4) and tightens with it. SKIPs
+    when the oracle declines the geometry.
     """
 
     spec = GateSpec(

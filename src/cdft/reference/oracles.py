@@ -1,4 +1,4 @@
-"""The oracle switch: whether PySCF/libxc-backed checks run at all (O-24).
+"""The oracle switch: whether PySCF/libxc-backed checks run at all.
 
 Off by default. Off means the oracle-dependent tests are deselected and the oracle-dependent gates
 leave the plan and the record, rather than appearing as SKIPPED rows on every diagnostic surface;

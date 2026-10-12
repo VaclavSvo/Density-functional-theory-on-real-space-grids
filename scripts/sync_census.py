@@ -68,7 +68,7 @@ IMPLICIT_SYNC_OPS = frozenset(
 #: contains ``token``. The Gauss--Legendre rule is memoised per order and built on a CPU tensor
 #: whatever the solve's device; a solve that needs many orders builds them once each at geometry
 #: time, which the loop/setup split of :func:`loop_syncs` would otherwise read as a loop site
-#: (O-31: 27 orders against a 7-iteration probe).
+#: (27 orders against a 7-iteration solve is enough to do so).
 HOST_SIDE_READS = (
     ("src/cdft/operators/hamiltonian.py", "_lanczos_bounds", "ritz["),
     ("src/cdft/scf/mixing.py", "mix", "float(c)"),
@@ -121,7 +121,7 @@ class SyncCensus:
             name = frame.f_code.co_filename
             if name.startswith(self.root) and name != self.self_file:
                 # Forward slashes on every platform: the host-side list and the recorded budgets
-                # name sites as ``src/cdft/...``; Windows frames carry backslashes (D-83).
+                # name sites as ``src/cdft/...``; Windows frames carry backslashes.
                 rel = name[len(self.root) + 1 :].replace("\\", "/")
                 return rel, frame.f_lineno, frame.f_code.co_name
             frame = frame.f_back
@@ -449,7 +449,7 @@ def census_solve(
     """Census of one solve without the command line (the importable API of gate G5.9).
 
     ``numerics`` is used as given except that a non-``None`` ``device`` replaces ``numerics.device``;
-    ``derive_grid=False`` keeps the grid of ``numerics`` (the D-42 bypass of the ladder gates).
+    ``derive_grid=False`` keeps the grid of ``numerics`` (the grid-derivation bypass the ladder gates use).
     Returns ``{"run": plain, "census": summary, "loop": loop}``, ``loop`` being :func:`loop_syncs`
     over ``scf_iterations`` for a self-consistent solve and ``eigen_iterations`` otherwise.
     """

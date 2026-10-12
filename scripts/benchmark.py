@@ -36,7 +36,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 print = functools.partial(print, flush=True)  # noqa: A001 - every progress line is flushed
 
 #: Spacing of the synthetic cubes, bohr. Z h = 0.25 keeps the cusp quadrature's mass weights
-#: positive (they need Z h <= 1) and matches the interacting production spacing (D-53).
+#: positive (they need Z h <= 1) and matches the interacting production spacing.
 SYNTHETIC_SPACING = 0.25
 #: Block size of the apply / filter kernels (the CheFSI block of a two-electron system plus extras).
 BLOCK = 5

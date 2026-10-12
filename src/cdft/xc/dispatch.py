@@ -3,8 +3,10 @@
 Names are lower-case and match the ``XCSpec.name`` written into every record.
 :func:`functional_from_spec` refuses a spec whose ``libxc_reference`` disagrees with the
 implementation's, so a record cannot say "PBE" while having been checked against something else.
-``module_path``, a learned functional supplied from outside (D-24), is resolved here too and is the
-only non-native entry.
+``module_path``, a learned functional supplied from outside, is resolved here too and is the only
+non-native entry.
+
+Design: D-24 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

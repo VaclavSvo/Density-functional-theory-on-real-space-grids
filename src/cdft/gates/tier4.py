@@ -2,6 +2,8 @@
 
 The radial and two-centre reference gates G4.8 and G4.9 live in :mod:`cdft.gates.tier1`, beside the
 closed forms they extend.
+
+Design: D-12, D-20, D-29 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -34,9 +36,9 @@ def reference_key_for(artifact: RunArtifact) -> str | None:
 class PublishedValueGate(ArtifactGate):
     """G4.7 -- self-consistent total energy against a transcribed or computed reference; 1e-3 Ha.
 
-    Two sources, both with provenance (D-29): NIST SRD 141 (:mod:`cdft.reference.literature`,
-    accuracy 1e-6) and PySCF all-electron RKS totals for what NIST does not cover
-    (:mod:`cdft.reference.computed`, O-12). The threshold is not tightened past the reference's own
+    Two sources, both with provenance: NIST SRD 141 (:mod:`cdft.reference.literature`, accuracy
+    1e-6) and PySCF all-electron RKS totals for what NIST does not cover
+    (:mod:`cdft.reference.computed`). The threshold is not tightened past the reference's own
     accuracy. SKIPs when no reference row exists for the scenario.
     """
 
@@ -105,12 +107,12 @@ class PublishedValueGate(ArtifactGate):
 
 
 class SelfInteractionGate(ArtifactGate):
-    """G4.5 -- ``E(H2+, R) - E(H)`` at the same functional must be negative; 0 Ha (D-12).
+    """G4.5 -- ``E(H2+, R) - E(H)`` at the same functional must be negative; 0 Ha.
 
     A semi-local functional does not cancel the Hartree self-repulsion of this one-electron system,
     so at large separation the molecule sits below the atom -- the delocalisation error [A9], [C1],
     which the gate requires to appear. Its magnitude is diagnostic D1.8, recorded and never
-    thresholded (D-20). Costs one extra solve; SKIPs if the atom does not converge.
+    thresholded. Costs one extra solve; SKIPs if the atom does not converge.
     """
 
     spec = GateSpec(

@@ -1,8 +1,11 @@
 """Tier 3 -- numerical convergence: gates that re-solve the scenario themselves and read the ladder.
 
-Each passes ``derive_grid=False``, because the D-42 sizing rule would rewrite every rung to the same
-derived grid and report a converged constant. G3.1 reports monotonicity beside the extrapolated
-error: scatter in a sequence is indistinguishable from physics once it reaches a dissociation curve.
+Each passes ``derive_grid=False``, because the automatic grid-sizing rule would rewrite every rung
+to the same derived grid and report a converged constant. G3.1 reports monotonicity beside the
+extrapolated error: scatter in a sequence is indistinguishable from physics once it reaches a
+dissociation curve.
+
+Design: D-16, D-42, D-53 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -28,7 +31,7 @@ MILLI_EV = 3.674932e-5
 
 
 def resolved_grid(artifact: RunArtifact):
-    """Return the grid configuration the run actually used, after the D-42 derivation.
+    """Return the grid configuration the run actually used, after automatic grid derivation.
 
     ``artifact.numerics.grid`` is only what the caller asked for, and on the all-electron path that
     is a placeholder, so a ladder built from it would sweep around a grid the run never used.
@@ -181,7 +184,7 @@ class DomainSizeConvergenceGate(ArtifactGate):
     """G3.2 -- energy shift when the box edge grows by 4 bohr; 1 meV/atom (D5).
 
     On the cusp-factorised path ``phi`` is constant for a single nucleus, so the Dirichlet condition
-    is wrong by ``f^2(R) = exp(-2 Z R)`` and box size is the only thing buying accuracy (D-42). The
+    is wrong by ``f^2(R) = exp(-2 Z R)`` and box size is the only thing buying accuracy. The
     boundary decay of the physical amplitude ``psi = f phi`` is measured too and, above 1e-5 of its
     peak, promoted into the verdict. Interacting scenarios SKIP.
     """
@@ -406,7 +409,7 @@ class SCFConvergenceGate(ArtifactGate):
 class InitialGuessGate(ArtifactGate):
     """G3.4 -- spread of the total energy over :data:`cdft.scf.loop.INITIAL_GUESSES`; 1e-7 Ha [F13].
 
-    The mixer changes the path, never the fixed point (D-16), so a wider spread means a
+    The mixer changes the path, never the fixed point, so a wider spread means a
     guess-dependent stationary point or an unconverged eigenproblem. SKIPs if any guess fails.
     """
 

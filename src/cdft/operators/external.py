@@ -1,9 +1,10 @@
-"""External potentials: the all-electron path of D-23 and the analytic model systems.
+"""External potentials: the all-electron nuclear Coulomb path and the analytic model systems.
 
 ``NUCLEAR_COULOMB`` is a bare ``-Z/r`` per nucleus, regularised at a coincident grid point by the
-cell average of ``1/r``: a stated O(h) approximation that nothing runs by default since D-35.
-``PSEUDOPOTENTIAL`` raises rather than substituting a bare Coulomb potential. Rationale:
-``docs/03_METHOD.md (Part E)``.
+cell average of ``1/r``: a stated O(h) approximation that no default configuration runs.
+``PSEUDOPOTENTIAL`` raises rather than substituting a bare Coulomb potential.
+
+Design: D-09, D-23, D-35 in ``docs/05_DECISION_LOG.md``; rationale in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -38,7 +39,7 @@ def external_potential(
     """Return ``v_ext`` on the grid domain, shape ``(n_points,)``, in Hartree.
 
     ``structure`` is ignored by the model kinds; ``grid.spacing`` is used only for the Coulomb
-    regularisation. ``PSEUDOPOTENTIAL`` raises (D-09).
+    regularisation. ``PSEUDOPOTENTIAL`` raises rather than being approximated.
     """
     target_dtype = dtype or grid.dtype
     points = grid.points().to(target_dtype)

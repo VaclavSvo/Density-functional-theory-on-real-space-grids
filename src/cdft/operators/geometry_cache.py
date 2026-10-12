@@ -1,4 +1,4 @@
-"""A process-wide cache of the geometry-only objects of a solve (D-66).
+"""A process-wide cache of the geometry-only objects of a solve.
 
 A scenario is solved 6--10 times per profile, each rebuilding the same density-independent
 objects: the cusp factor, the cusp-aware quadrature (sphere rules, partition of unity, the
@@ -9,7 +9,7 @@ The key is a value, never an identity (:func:`geometry_key`): grid geometry (sha
 origin, both finite-difference orders, boundary, point count, a mask digest for a masked domain),
 device string, dtype, the CSR index dtype in force there, the charges and positions as exact
 float64 tuples, and :func:`constants_tag`. **The density never enters.** Nothing in a solve writes
-into a cached object (D-66), so a hit reproduces a rebuild bit for bit.
+into a cached object, so a hit reproduces a rebuild bit for bit.
 
 One :class:`GeometryBundle` per key holds named parts built on first request; its size is recounted
 whenever a part is added, because the objects fill lazy caches after they are built. Eviction is
@@ -21,6 +21,8 @@ CSC view of ``L`` (:data:`~cdft.operators.quadrature.TRANSPOSE_AS_CSC`).
 ``CDFT_GEOMETRY_CACHE=0`` builds every object afresh and stores nothing; :func:`bypass` does the
 same inside a ``with`` block without disturbing stored entries. Every solve records
 ``measurements["geometry_cache"]``.
+
+Design: D-66 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -62,7 +64,7 @@ __all__ = [
 #: not, so a process that reloads edited code would otherwise be served the old object.
 CACHE_VERSION = 2
 
-#: ``CDFT_GEOMETRY_CACHE=0`` switches the cache off (D-66): every solve builds its factor,
+#: ``CDFT_GEOMETRY_CACHE=0`` switches the cache off: every solve builds its factor,
 #: quadrature, step tensors and Poisson kernel afresh and stores nothing. Default on, every device.
 ENV_GEOMETRY_CACHE = "CDFT_GEOMETRY_CACHE"
 
@@ -262,8 +264,8 @@ def enabled() -> bool:
 def bypass() -> Iterator[None]:
     """Force misses inside the block: objects are built afresh and not stored; entries are kept.
 
-    For G5.2, whose repeat may want to rebuild every geometry object rather than test a cache hit
-    (D-66); the record then says ``hit: False, bypassed: True``.
+    For G5.2, whose repeat may want to rebuild every geometry object rather than test a cache hit;
+    the record then says ``hit: False, bypassed: True``.
     """
     with _CACHE.lock:
         _CACHE.bypass_depth += 1

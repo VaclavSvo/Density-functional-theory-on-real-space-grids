@@ -10,13 +10,14 @@ Output (default ``reports/figures/<scenario_id>/<run_id>/``): per figure a ``<na
 ``manifest.json`` and ``record.h5``; a partial re-render keeps the entries it left in place.
 
 Only :func:`solve_and_gate` solves, every renderer reads a :class:`FigureRecord`, and nothing is
-drawn without a verdict (D-72). Survey tags resolve in ``docs/00_LITERATURE_SURVEY.md``;
-design, house style and what is deliberately not drawn in ``docs/03_METHOD.md`` (Part E).
+drawn without a verdict. Survey tags resolve in ``docs/00_LITERATURE_SURVEY.md``; design,
+house style and what is deliberately not drawn in ``docs/03_METHOD.md`` (Part E); decisions
+D-35, D-41, D-42, D-43, D-53, D-54, D-55, D-57, D-64, D-72, D-73 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
 
-# Path bootstrap, as in run.py (D-57): root modules and src/cdft importable without installing.
+# Path bootstrap, as in run.py: root modules and src/cdft importable without installing.
 import pathlib as _pathlib
 import sys as _sys
 
@@ -108,7 +109,7 @@ INTERPOLATION_DEGREE = 7
 #: Points per chunk when evaluating fields: 20 000 gather a (20 000, 8, 8, 8) float64 block, 82 MB.
 EVALUATION_CHUNK = 20_000
 
-#: Decades of density shown below the maximum; six reaches the tail the boxes are sized for (D-53).
+#: Decades of density shown below the maximum; six reaches the tail the boxes are sized for.
 DENSITY_DECADES = 6.0
 
 #: Radius about each nucleus excluded when scaling Laplacian errors: ``lap n ~ -4 Z n / r`` there.
@@ -414,7 +415,8 @@ def select_scenario(
     """Return the scenario to solve and the notes explaining how it was obtained.
 
     A composed id that is registered comes from the registry, with its curated gates and references;
-    otherwise the scenario is built. A functional needs Coulomb nuclei (D-53).
+    otherwise the scenario is built. A functional needs Coulomb nuclei: the self-consistent path
+    is the all-electron one.
     """
     base = registry[scenario_id]
     notes: list[str] = []
@@ -579,7 +581,7 @@ def resolve_resolution(
 ) -> tuple[NumericsConfig, dict[str, float]]:
     """Return ``(numerics, grid rule targets)`` of a registered scenario at one resolution level.
 
-    Only a registered id has a setup (D-73). ``standard`` is the production rule; every other level
+    Only a registered id has a setup. ``standard`` is the production rule; every other level
     is exploratory, and its targets must be active for the solve and for the gate pass alike.
     """
     numerics, targets = numerics_for(scenario.scenario_id, level, device=device)
@@ -608,7 +610,7 @@ def solve_and_gate(
 
 @dataclass(frozen=True, slots=True)
 class Verdict:
-    """Whether a record may be drawn and how it is marked: deferred, known-open, invalid (D-72)."""
+    """Whether a record may be drawn and how it is marked: deferred, known-open, invalid."""
 
     status: str
     drawable: bool
@@ -617,7 +619,7 @@ class Verdict:
     known_open: int
     failed_gates: tuple[str, ...]
     reason: str
-    #: The failed gates that are registered known-open rows within their band (D-43).
+    #: The failed gates that are registered known-open rows within their band.
     known_gates: tuple[str, ...] = ()
 
     @property
@@ -653,7 +655,7 @@ def classify_record(
     error_message: str = "",
     allow_invalid: bool = False,
 ) -> Verdict:
-    """Apply the drawing policy (D-72): ``TRUSTED_STATUSES`` only, unless ``allow_invalid``."""
+    """Apply the drawing policy: ``TRUSTED_STATUSES`` only, unless ``allow_invalid``."""
     from cdft.gates.known_open import partition_failures
 
     failed = tuple(r.gate_id for r in gate_results if r.verdict is GateVerdict.FAIL)
@@ -737,7 +739,7 @@ class FigureRecord:
 
     @property
     def interacting(self) -> bool:
-        """Whether the scenario carries Hartree and XC (``xc.name != "none"``, D-53)."""
+        """Whether the scenario carries Hartree and XC (``xc.name != "none"``)."""
         return self.scenario.xc.name.lower() != "none"
 
     @property
@@ -758,7 +760,7 @@ class FigureRecord:
 
     @property
     def cusp_factorised(self) -> bool:
-        """Whether the density was solved as ``f^2 |phi|^2`` (D-35); the recorded value wins."""
+        """Whether the density was solved as ``f^2 |phi|^2`` (cusp factor); the recorded value wins."""
         ext = self.scenario.external
         recorded = self.measurements.get("cusp_factorisation")
         flag = bool(recorded) if recorded is not None else bool(ext.cusp_factorisation)
@@ -1107,7 +1109,7 @@ _PAD = int(-_OFFSETS[0]) + 1  # 4 cells of halo on each side of the box
 
 
 def factor_terms(points: np.ndarray, charges: np.ndarray, positions: np.ndarray, order: int = 1):
-    """``u = sum_a Z_a |r - R_a|`` and derivatives (D-35); ``hess_u`` diverges at a nucleus."""
+    """``u = sum_a Z_a |r - R_a|`` and derivatives; ``hess_u`` diverges at a nucleus."""
     m = points.shape[0]
     u = np.zeros(m)
     grad = np.zeros((m, 3))
@@ -1128,7 +1130,7 @@ class FieldEvaluator:
     """Evaluate the recorded density and smooth fields at arbitrary points.
 
     ``n(r) = f^2(r) I[rho](r)``: ``f^2`` analytic, ``rho = n_grid / f^2_grid`` interpolated by the
-    degree-7 tensor-product Lagrange polynomial of the solver's quadrature (D-54), so ``n``
+    degree-7 tensor-product Lagrange polynomial of the solver's quadrature, so ``n``
     reproduces the record at a grid point. Derivatives combine it with those of ``u``:
 
         grad n = f^2 (grad rho - 2 rho grad u)
@@ -1693,7 +1695,7 @@ def radial_ks_solution(charge: float, electrons: float, functional_name: str):
     return _RADIAL_KS_CACHE[key]
 
 
-#: The radial oracle's density is trusted from this radius out (O-25): its Dirichlet node at 1e-12
+#: The radial oracle's density is trusted from this radius out: its Dirichlet node at 1e-12
 #: bohr admixes the irregular solution at ~r_min/r (4e-6 at 1e-6 bohr, < 1e-8 from 1e-4), and a
 #: spline in ``ln r`` magnifies the layer enormously.
 RADIAL_ORACLE_TRUST_BOHR = 1.0e-4
@@ -1708,7 +1710,7 @@ def _radial_ks_reference(charge: float, electrons: float, functional_name: str, 
     """The oracle's density as a reference, with ``n``, ``n'``, ``n''`` at any radius.
 
     Spline of ``ln n`` in ``ln r`` outside :data:`RADIAL_ORACLE_JOIN_BOHR`, Kato form inside;
-    ``z_eff`` is the functional's cusp charge, which a GGA shifts off ``Z`` (D-55).
+    ``z_eff`` is the functional's cusp charge, which a GGA shifts off ``Z``.
     """
     from scipy.interpolate import CubicSpline
 
@@ -1823,7 +1825,7 @@ _TWO_CENTRE_CACHE: dict[float, Any] = {}
 
 
 def two_centre_energy(bond_length: float):
-    """H2+ ground state at ``bond_length`` from the prolate-spheroidal oracle (D-41), cached."""
+    """H2+ ground state at ``bond_length`` from the prolate-spheroidal oracle, cached."""
     key = round(float(bond_length), 12)
     if key not in _TWO_CENTRE_CACHE:
         from cdft.reference.two_centre import h2_plus_energy
@@ -2027,7 +2029,7 @@ def external_at(record: FigureRecord, points: np.ndarray) -> np.ndarray:
 
 
 def _hydrogenic_potential(charge: float, distance: np.ndarray) -> np.ndarray:
-    """:func:`cdft.operators.quadrature.hydrogenic_1s_potential` on numpy input (the D-54 split)."""
+    """:func:`cdft.operators.quadrature.hydrogenic_1s_potential` on numpy input (analytic v_H part)."""
     from cdft.operators.quadrature import hydrogenic_1s_potential
 
     return hydrogenic_1s_potential(charge, torch.as_tensor(distance, dtype=torch.float64)).numpy()
@@ -2036,7 +2038,7 @@ def _hydrogenic_potential(charge: float, distance: np.ndarray) -> np.ndarray:
 def prepare_hartree(evaluator: FieldEvaluator) -> bool:
     """Register the smooth remainder of ``v_H`` for point evaluation; ``False`` when impossible.
 
-    ``v_H = sum_a c_a v_1s(|r - R_a|; Z_a) + v_smooth`` (D-54), the remainder ``C^3`` at a nucleus.
+    ``v_H = sum_a c_a v_1s(|r - R_a|; Z_a) + v_smooth``, the remainder ``C^3`` at a nucleus.
     """
     record = evaluator.record
     if record.v_hartree is None:
@@ -2084,7 +2086,7 @@ def xc_at(record: FigureRecord, n: np.ndarray, grad: np.ndarray | None, hess: np
     LDA: ``v_xc = de/dn``. GGA: ``v_xc = de/dn - div(2 e_sigma grad n)`` expanded exactly as
     ``2 [e_sigma lap n + (e_sigma,n grad n + e_sigma,sigma grad sigma) . grad n]`` with
     ``grad sigma = 2 H_n grad n``, the second derivatives from autograd. This is the potential the
-    weak form integrates (D-55), not the record's finite-difference field, which is wrong near a
+    weak form integrates, not the record's finite-difference field, which is wrong near a
     nucleus.
     """
     functional = record.functional()
@@ -2206,7 +2208,7 @@ class FigureContext:
 
     @property
     def n_max(self) -> float:
-        """The largest recorded density value (at a nucleus on every Phase 1 grid, D-64)."""
+        """The largest recorded density value (at a nucleus: nuclei sit on grid points)."""
         return float(np.max(self.record.density))
 
     def frame(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -2451,7 +2453,7 @@ def _needs_density(ctx: FigureContext) -> str | None:
 
 
 def fig_density_map(ctx: FigureContext) -> RenderedFigure:
-    """log10 n on the plane through the nuclei, cusp resolved (D-35), decade contours."""
+    """log10 n on the plane through the nuclei, cusp resolved, decade contours."""
     plt = pyplot()
     style = ctx.style
     a, b, points = ctx.plane()
@@ -2524,7 +2526,7 @@ def fig_density_profile(ctx: FigureContext) -> RenderedFigure:
     top.semilogy(b, n, color=SERIES[0], label="this work")
     columns = {"b_bohr": b, "density": n, "dlnn_db": slope}
 
-    # Grid samples on the axis, when the axis is a grid line (nuclei are lattice points, D-64).
+    # Grid samples on the axis, when the axis is a grid line (nuclei are lattice points).
     drew_grid_values = False
     axis_index = int(np.argmax(np.abs(u)))
     if abs(abs(u[axis_index]) - 1.0) < 1.0e-12:
@@ -2554,7 +2556,7 @@ def fig_density_profile(ctx: FigureContext) -> RenderedFigure:
         columns["dlnn_db_reference"] = slope_ref
     top.set_ylim(floor, ctx.n_max * 3.0)
     top.set_ylabel(r"$n$ (bohr$^{-3}$)")
-    # Every Phase 1 profile falls away from the centre, so the band under the peak is free.
+    # Every profile drawn here falls away from the centre, so the band under the peak is free.
     top.legend(loc="lower center", handlelength=1.4)
     _panel_label(top, "a")
 
@@ -2609,7 +2611,7 @@ def fig_density_profile(ctx: FigureContext) -> RenderedFigure:
             bottom.set_ylim(-1.2 * span, 1.2 * span)
     bottom.set_xlabel(ctx.axis_label("u"))
     bottom.set_ylabel(r"$d\ln n/dz$ (bohr$^{-1}$)" if record.positions.shape[0] <= 1 else r"$d\ln n/db$ (bohr$^{-1}$)")
-    # Below the figure: every in-panel position collides with some system's curves. This work first.
+    # Below the figure: every in-panel position collides with some system's curves. "this work" first.
     handles, labels = bottom.get_legend_handles_labels()
     order = sorted(range(len(labels)), key=lambda k: labels[k] != "this work")
     fig.legend([handles[k] for k in order], [labels[k] for k in order],
@@ -2819,7 +2821,7 @@ def fig_cusp_and_decay(ctx: FigureContext) -> RenderedFigure:
     left.axhline(1.0, color=INK_MUTED, linewidth=style.thin_width, label="Kato: 1")
     reference = ctx.reference if positions.shape[0] == 1 else None
     if reference is not None and reference.z_eff is not None and abs(reference.z_eff / charges[0] - 1.0) > 1.0e-4:
-        # A GGA potential diverges at the nucleus, so its exact KS cusp is Z_eff != Z (D-55).
+        # A GGA potential diverges at the nucleus, so its exact KS cusp is Z_eff != Z.
         left.axhline(reference.z_eff / charges[0], color=SERIES[1], linestyle="--", linewidth=style.thin_width,
                      label=f"radial oracle: $Z_{{\\rm eff}}/Z$ = {reference.z_eff / charges[0]:.4f}")
         metrics["oracle_z_eff"] = reference.z_eff
@@ -3165,7 +3167,7 @@ def _interacting(ctx: FigureContext) -> str | None:
 
 
 def _tail_regression(r: np.ndarray, v: np.ndarray) -> tuple[float, float] | None:
-    """Least-squares ``-v ~ alpha r^-beta`` over the given samples (D1.7); ``None`` if ill-posed."""
+    """Least-squares ``-v ~ alpha r^-beta`` over the given samples; ``None`` if ill-posed."""
     good = (v < 0.0) & np.isfinite(v) & (r > 0.0)
     if good.sum() < 5:
         return None
@@ -3308,7 +3310,7 @@ def fig_potentials(ctx: FigureContext) -> RenderedFigure:
 
 
 def _one_electron_interacting(ctx: FigureContext) -> str | None:
-    """Applicability: an interacting record with exactly one electron (D1.1)."""
+    """Applicability: an interacting record with exactly one electron."""
     reason = _interacting(ctx)
     if reason is not None:
         return reason

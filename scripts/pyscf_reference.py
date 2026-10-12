@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compute the Gaussian-basis all-electron references NIST does not cover (O-12).
+"""Compute the Gaussian-basis all-electron references NIST does not cover.
 
     python scripts/pyscf_reference.py            # writes src/cdft/reference/computed.py
 
@@ -7,10 +7,12 @@ PySCF spin-restricted Kohn--Sham, all-electron, point nuclei, at cc-pVQZ, cc-pV5
 (the largest correlation-consistent sets PySCF ships) with ``grids.level = 9`` and
 ``conv_tol = 1e-12``, for He at LDA (VWN) and PBE and H2 at R = 1.4 bohr at LDA and PBE. The stored
 value is the cc-pV5Z total and the stated uncertainty is ``max(|V5Z - VQZ|, |aug-V5Z - V5Z|)`` --
-the basis-set truncation these Gaussian numbers carry and a grid code does not (D-03), so gate G4.7
+the basis-set truncation these Gaussian numbers carry and a grid code does not, so gate G4.7
 compares within that uncertainty and never tighter. The functional strings are libxc identifiers, so
 the reference uses exactly the functional the native implementation reproduces (G0.6). Every entry
-is a ``COMPUTED_ORACLE`` (``ReferenceKind.CROSS_CODE``), not literature (D-29).
+is a ``COMPUTED_ORACLE`` (``ReferenceKind.CROSS_CODE``), not literature.
+
+Design: D-03, D-29 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

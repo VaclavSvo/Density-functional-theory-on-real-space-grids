@@ -1,10 +1,10 @@
-"""Fused device kernels for the divergence stencil and the Chebyshev recurrence (D-65).
+"""Fused device kernels for the divergence stencil and the Chebyshev recurrence.
 
 Device path only: on the CPU every function here returns exactly what the eager code returns (the
-CPU float64 path is the audit reference, D-60); on CUDA arithmetic may be re-associated as long as
-the GPU-vs-CPU fingerprint diff stays <= 1e-10 (D-65).
+CPU float64 path is the audit reference); on CUDA arithmetic may be re-associated as long as the
+GPU-vs-CPU fingerprint diff stays <= 1e-10.
 
-Three tiers for ``sum_d D_d^T [w_d D_d phi]`` (D-38), chosen once per CUDA device at first use and
+Three tiers for ``sum_d D_d^T [w_d D_d phi]``, chosen once per CUDA device at first use and
 recorded (G5.5, never a silent fallback): ``compile`` (``torch.compile`` of the eager stencil,
 spatial shape static, batch dynamic, needs Triton); ``gemm`` (each 1-D staggered derivative and its
 transpose as a dense ``(n + 2p) x n`` matrix, ~5 launches per axis instead of ~18, but dense flops
@@ -13,6 +13,8 @@ eager); ``eager`` (:func:`cdft.operators.divergence._weighted_divergence_eager`)
 
 ``CDFT_FUSED`` = ``auto`` (default) | ``compile`` | ``gemm`` | ``eager``. A forced tier that cannot
 run raises; ``auto`` degrades in the order above and records every reason.
+
+Design: D-38, D-60, D-65 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -85,7 +87,7 @@ def resolve_tier(
     """Return ``(tier, reason)`` for a device; pure logic, testable without a card.
 
     The probes return ``None`` when the tier may be used, else the reason it may not. On the CPU the
-    answer is ``eager`` whatever is requested (the audit path, D-60); a forced tier whose probe
+    answer is ``eager`` whatever is requested (the audit path); a forced tier whose probe
     refuses raises with that reason (G5.5).
     """
     if not is_cuda:
@@ -229,7 +231,7 @@ def staggered_matrices(
     """Dense ``D`` (``(extent + accuracy) x extent``) and its exact transpose, float64 on ``device``.
 
     The matrix of :func:`cdft.operators.divergence.staggered_derivative` on a zero-padded axis (row
-    ``r`` is face ``r - p``, entries ``c_k / h`` at node ``face + 1 + k``, D-38), so the Dirichlet
+    ``r`` is face ``r - p``, entries ``c_k / h`` at node ``face + 1 + k``), so the Dirichlet
     halo is built in. Cached per (extent, spacing, accuracy).
     """
     forward, transpose = _staggered_matrices_cpu(int(extent), float(spacing), int(accuracy))
@@ -287,7 +289,7 @@ def _stencil_taps(spacing: float, accuracy: int) -> tuple[tuple[tuple[int, float
 
 
 def _divergence_traceable(box, w0, w1, w2, forward_taps, transpose_taps, accuracy: int, shape):
-    """The eager stencil of D-38 with its coefficients passed in, for Dynamo to trace (tier a).
+    """The eager staggered stencil with its coefficients passed in, for Dynamo to trace (tier a).
 
     Same slices and term order as ``_weighted_divergence_eager``; the coefficients arrive as
     constants so Dynamo does not trace the exact-rational solve.
@@ -394,8 +396,8 @@ def chebyshev_update(
     The caller passes ``a = 2 sigma2 / e``, ``b = sigma sigma2``. On the CPU and under ``eager``
     the expression stands as written, so the bits do not move. On CUDA ``alpha_chain`` is
     ``add(y, alpha=-c).mul_(a).add_(previous, alpha=-b)`` (3 launches, no temporaries, ~1e-12
-    relative, allowed by D-65) and ``compile`` is one fused kernel fed ``(c, a, b)`` by a pinned
-    asynchronous copy, so no host sync and no recompilation per step.
+    relative, inside the GPU-vs-CPU tolerance) and ``compile`` is one fused kernel fed ``(c, a, b)``
+    by a pinned asynchronous copy, so no host sync and no recompilation per step.
     """
     if applied.device.type != "cuda":
         return (applied - c * y) * a - b * previous

@@ -1,4 +1,4 @@
-"""Card-agnostic device policy: what the solver finds, and the settings derived from it (D-70).
+"""Card-agnostic device policy: what the solver finds, and the settings derived from it.
 
 Every device-dependent setting is derived from a :class:`DeviceProfile` captured once per process
 from the device the run resolved to, never from a hard-coded card:
@@ -11,7 +11,7 @@ graph_memory_fraction     ``min(0.25, 0.5 * free / total)``: a graph pool never 
                           the memory free at capture (:data:`GRAPH_FRACTION_CAP`)
 graph_pool_blocks         10 -- buffers the captured recurrence keeps alive, a property of the code
 trsm_chunk                2^18 -- the cuBLAS ``trsm`` cliff is a property of the cuBLAS build
-                          (D-62) and chunking is bitwise, so the safe width is kept on every card
+                          and chunking is bitwise, so the safe width is kept on every card
 use_cuda_graphs           free VRAM >= 2 GiB at capture (:data:`GRAPHS_MIN_FREE_BYTES`)
 max_concurrent_solves     ``clamp(floor((free - 0.5 GiB) / 2 GiB), 1, 4)``, 2 GiB being the atom peak
 ========================  ==========================================================================
@@ -26,7 +26,9 @@ precision policy does not allow. A caller that switched it on gets an exception,
 
 :func:`apply_policy` is called by :func:`cdft.precision.configure_device` before the first tensor,
 idempotent per device; the profile and settings go into every record via
-:func:`cdft.precision.policy_record`. No environment variable is read here.
+:func:`cdft.precision.policy_record`. No environment variable is read here except the explicit
+geometry-cache budget :data:`ENV_GEOMETRY_CACHE_BYTES`. Design: D-62, D-70 in
+``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -155,8 +157,8 @@ def _canonical(device: torch.device | str) -> torch.device:
 def cgroup_memory_limit_bytes() -> int | None:
     """The memory limit of this process's cgroup (v1 or v2), or ``None`` when there is none.
 
-    A container's limit is what an OOM kill enforces, and it can be well below ``MemTotal``
-    (5.8 GiB against 8 GiB on a cgroup-limited host); the CPU cache budget must see it.
+    A container's limit is what an OOM kill enforces, and it can be well below ``MemTotal``; the
+    CPU cache budget must see it.
     """
     import pathlib
 
@@ -394,8 +396,8 @@ def apply_policy(device: torch.device | str) -> DerivedSettings:
     cache_bytes = settings.geometry_cache_bytes
     override = os.environ.get(ENV_GEOMETRY_CACHE_BYTES)
     if override is not None:
-        # An explicit budget for a host the derivation cannot judge (a live diatomic solve beside a
-        # full cache exceeds a 6 GiB cgroup); recorded, never silent (G5.5). A bad value raises.
+        # An explicit budget for a host the derivation cannot judge (a tight cgroup where a solve
+        # beside a full cache would not fit); recorded, never silent (G5.5). A bad value raises.
         try:
             cache_bytes = int(override)
         except ValueError as exc:

@@ -5,6 +5,8 @@ soon as it is registered, and each reports the worst functional rather than a me
 are fixed-seed, log-uniform in density over ``[1e-4, 10]`` and uniform in the reduced gradient over
 ``[0, 3]`` plus a second set over ``[0, 8]``, where functionals that coincide at small ``s``
 separate. Polarised sets use unequal channels and an arbitrary angle, so ``sigma_ud`` is exercised.
+
+Design: D-05 (the libxc tolerance) in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -163,13 +165,13 @@ class FunctionalDerivativeGate(ComponentGate):
 
 
 class LibxcAgreementGate(ComponentGate):
-    """G0.6 -- ``e_xc`` and every potential against libxc at 1e5 random points; 1e-10 (D-05).
+    """G0.6 -- ``e_xc`` and every potential against libxc at 1e5 random points; 1e-10.
 
     Scaled by ``max(1, |libxc|)``: absolute where the quantity is O(1), relative where it is large,
     since ``v_sigma`` reaches several hundred and an absolute demand there would ask for eleven
     significant figures. Both conventions are in the detail, as are the deferred functionals, which
     are listed with their reason rather than silently passed. Off the plan unless the oracles are
-    requested (O-24); requested without libxc it SKIPs with the reason.
+    requested; requested without libxc it SKIPs with the reason.
     """
 
     spec = GateSpec(
@@ -179,7 +181,7 @@ class LibxcAgreementGate(ComponentGate):
         kind=GateKind.EXACT,
         citation="I1 (libxc), through PySCF; D-05",
         units="max |native - libxc| / max(1, |libxc|)",
-        requires_oracle=True,  # off the plan unless CDFT_ORACLES=1 (O-24)
+        requires_oracle=True,  # off the plan unless CDFT_ORACLES=1
     )
 
     N_POINTS = 100_000

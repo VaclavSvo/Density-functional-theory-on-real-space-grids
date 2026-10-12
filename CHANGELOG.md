@@ -16,6 +16,11 @@ Release preparation:
   added; documentation rewritten as project documentation and brought up to date.
 - The inner-loop test-suite profile is named `quick` (formerly `agent`); `--gates quick` in
   `figures.py` and `scripts/figures_suite.py` likewise.
+- Comments and docstrings tidied: decision ids collected into one pointer per module, dated
+  narrative removed; no code changed (verified by AST comparison and the fast tier).
+- `scripts/convergence_figure.py` and `docs/figures/`: the energy-error-against-spacing ladders
+  shown in the README (bare H₂⁺ vs the two-centre oracle, He at LDA vs NIST).
+- GitHub Actions workflow running the fast tier and the gate-catalogue check on every push.
 
 Since the last internal milestone (D-75 … D-83, 2026-09-18/19):
 

@@ -1,14 +1,17 @@
-"""The scenario registry -- "what to solve". Never contains a grid spacing (Q1.5).
+"""The scenario registry -- "what to solve". Never contains a grid spacing.
 
 Every reference here is analytic or cited; a wanted but untranscribed number is *absent* and the
-gate that needs it reports SKIPPED with a reason (G5.3). Phase 1 is exactly ``Z <= 2`` and
-``N <= 2``. Why each scenario is in the set: ``docs/03_METHOD.md (Part E)``.
+gate that needs it reports SKIPPED with a reason (G5.3). The all-electron set is exactly ``Z <= 2``
+and ``N <= 2``.
+
+Design: D-12, D-17, D-23, D-35, D-53, D-54, D-57 in ``docs/05_DECISION_LOG.md``; why each scenario
+is in the set in ``docs/03_METHOD.md (Part E)``.
 """
 
 from __future__ import annotations
 
-# Path bootstrap: this file is canonical at the repository root next to ``contract.py`` (D-57), so
-# the three "what and how" modules import without the package being installed.
+# Path bootstrap: this file is canonical at the repository root next to ``contract.py``, so the
+# three "what and how" modules import without the package being installed.
 import pathlib as _pathlib
 import sys as _sys
 
@@ -51,8 +54,8 @@ __all__ = [
     "QUICK_PROFILE_SCENARIOS",
 ]
 
-#: The marker for a bare-potential (non-interacting) scenario: no Hartree term, no functional
-#: (D-53). Rung LDA is a placeholder; the enumeration has no rung for "none".
+#: The marker for a bare-potential (non-interacting) scenario: no Hartree term, no functional.
+#: Rung LDA is a placeholder; the enumeration has no rung for "none".
 NONINTERACTING_XC = XCSpec(name="none", rung=XCRung.LDA, libxc_reference=())
 
 
@@ -137,7 +140,7 @@ def hydrogenic(
     """One-electron atom with a bare -Z/r nucleus: H (Z=1), He+ (Z=2).
 
     Exact spectrum ``-Z^2 / (2 n^2)``, so it needs no literature; the first test of the
-    all-electron path (D-23). Cusp-factorised (D-35) the ground state is exact to round-off, so the
+    all-electron path. Cusp-factorised, the ground state is exact to round-off, so the
     tolerances below are gross-regression guards and G4.8 plus the golden layer carry the tight
     checks. With one electron the exact functional gives ``E_H + E_xc = 0`` (diagnostic D1.1).
     """
@@ -177,7 +180,7 @@ def h2_plus(bond_length: float = 2.0, scenario_id: str = "") -> ScenarioSpec:
     """H2+ at a fixed bond length in bohr: one electron, two protons -- rung L7.
 
     The self-interaction reference system (``docs/01_PROJECT.md (Part C)``). G4.5 requires the
-    LDA/PBE failure to be reproduced: getting stretched H2+ *right* means a bug in Hartree (D-12).
+    LDA/PBE failure to be reproduced: getting stretched H2+ *right* means a bug in Hartree.
     """
     spec_id = scenario_id or f"h2plus_R{bond_length:g}"
     half = bond_length / 2.0
@@ -216,7 +219,7 @@ def h2_plus(bond_length: float = 2.0, scenario_id: str = "") -> ScenarioSpec:
 
 
 def helium(scenario_id: str = "he_atom") -> ScenarioSpec:
-    """Neutral helium, all-electron: the two-electron endpoint of Phase 1.
+    """Neutral helium, all-electron: the two-electron endpoint of the scenario set.
 
     Its exact non-relativistic energy is known to more digits than any functional needs, so the
     *functional* error is read off directly. No Kohn--Sham reference is attached until a published
@@ -250,7 +253,7 @@ def hydrogen_molecule(bond_length: float = 1.4, scenario_id: str = "") -> Scenar
     """H2 at a fixed bond length in bohr -- rung L7, the flat-plane system of [A23].
 
     No energy reference: H2 at a given functional is the quantity being measured, and its exact
-    energy is a correlated-method number this solver cannot produce (O-5). What it carries instead
+    energy is a correlated-method number this solver cannot produce. What it carries instead
     is scan membership -- by [A21] and [A23] the exact ``E(N, M)`` surface follows from the integer
     endpoints.
     """
@@ -358,7 +361,7 @@ class ScenarioRegistry:
 
 
 def _default_registry() -> ScenarioRegistry:
-    """Build the Phase 1 registry."""
+    """Build the default registry."""
     reg = ScenarioRegistry()
     # Analytic model systems: rungs L0 and L1.
     reg.register(harmonic_well(omega=1.0, scenario_id="harmonic_w1"))
@@ -367,11 +370,11 @@ def _default_registry() -> ScenarioRegistry:
     reg.register(hydrogenic(charge=1.0, symbol="H", scenario_id="h_atom"))
     reg.register(hydrogenic(charge=2.0, symbol="He", scenario_id="he_plus", n_electrons=1.0))
     reg.register(h2_plus(bond_length=2.0, scenario_id="h2plus_R2"))
-    # Two-electron systems: the Phase 1 endpoint.
+    # Two-electron systems: the endpoint of the set.
     reg.register(helium())
     reg.register(hydrogen_molecule(bond_length=1.4, scenario_id="h2_R1.4"))
 
-    # The same systems with Hartree and a functional (D-53).
+    # The same systems with Hartree and a functional.
     lda = lda_functional("vwn")  # what NIST SRD 141 used, so G4.7 compares like with like
     pbe = pbe_functional()
     nist = ("G4.7",)
@@ -417,14 +420,15 @@ def _default_registry() -> ScenarioRegistry:
     return reg
 
 
-#: The default registry. Phase 1 in full: every system with ``Z <= 2`` and ``N <= 2``.
+#: The default registry: every system with ``Z <= 2`` and ``N <= 2``.
 REGISTRY = _default_registry()
 
 #: Scenarios the ``quick`` test-suite profile solves; the ``full`` profile solves every one. A
 #: profile decides which checks run, never their settings. The inner loop takes the seven
 #: non-interacting scenarios plus the two cheapest interacting ones that exercise every new code
 #: path once (helium at LDA and at PBE, both on the 14-bohr box; the hydrogen-containing scenarios
-#: need 21--29 bohr boxes under D-53 and cost 4--8x as much), and names the ones it skipped.
+#: need 21--29 bohr boxes under the interacting grid rule and cost 4--8x as much), and names the
+#: ones it skipped.
 QUICK_PROFILE_SCENARIOS: tuple[str, ...] = (
     "harmonic_w1", "box_L10", "h_atom", "he_plus", "h2plus_R2", "he_atom", "h2_R1.4",
     "he_atom_lda", "he_atom_pbe",

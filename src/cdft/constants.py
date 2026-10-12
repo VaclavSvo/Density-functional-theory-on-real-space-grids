@@ -79,7 +79,7 @@ _SYMBOL_TO_Z: dict[str, int] = {s: i for i, s in enumerate(ELEMENT_SYMBOLS) if i
 def atomic_number(symbol: str) -> int:
     """Return the atomic number of an element symbol, case-insensitively.
 
-    Raises ``KeyError`` for a symbol outside :data:`ELEMENT_SYMBOLS`, never a default (Q8.1).
+    Raises ``KeyError`` for a symbol outside :data:`ELEMENT_SYMBOLS`, never a default.
     """
     key = symbol.strip().capitalize()
     if key not in _SYMBOL_TO_Z:

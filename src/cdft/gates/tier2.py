@@ -1,6 +1,8 @@
 """Tier 2 -- internal consistency of the converged solution, checked against the run itself.
 
 Nothing here needs an external number, so it applies to scenarios with no reference value at all.
+
+Design: D-39, D-44, D-55, D-64 in ``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations
@@ -41,8 +43,8 @@ class EigenvalueResidualGate(ArtifactGate):
         from ``apply``, so the Ritz-value drift bounds its error and the collocation residual does
         not. Both are recorded, and the detail says which was thresholded.
         """
-        # On the weak-form path the residual is bounded only by the filter's stopping rule (D-44),
-        # not driven to ``residual_tol``, so it overstates the eigenvalue error by orders.
+        # On the weak-form path the residual is bounded only by the filter's stopping rule, not
+        # driven to ``residual_tol``, so it overstates the eigenvalue error by orders.
         galerkin = bool(
             artifact.measurements.get("galerkin_subspace", artifact.measurements.get("divergence_form", False))
         )
@@ -279,8 +281,8 @@ class VariationalTailGate(ArtifactGate):
         residuals = trajectory.residual_norms[-self.WINDOW:]
         tolerance = artifact.numerics.scf.energy_tol
         energy_rises = [b - a for a, b in zip(energies[:-1], energies[1:]) if b - a > tolerance]
-        # Strict on the residual: a rising tail has meant too few filter steps per SCF iteration
-        # (D-55 item 8), which a rule loosened to the mixer's wander would not have found.
+        # Strict on the residual: a rising tail has meant too few filter steps per SCF iteration,
+        # which a rule loosened to the mixer's wander would not have found.
         residual_rises = [b - a for a, b in zip(residuals[:-1], residuals[1:]) if b > a]
         return make_result(
             self.spec,
@@ -301,8 +303,8 @@ class EggBoxGate(ArtifactGate):
     """G2.7 -- peak-to-peak energy spread as the nuclei move through one cell; 1 meV/atom (D16-D18).
 
     A rigid translation changes no physics, so the whole spread is discretisation artefact -- one
-    that is periodic in the nuclear position and therefore biases a corpus instead of averaging out
-    (D-39). Eight offsets along the body diagonal, since an axis-aligned sweep can sit in a symmetry
+    that is periodic in the nuclear position and therefore biases a corpus instead of averaging out.
+    Eight offsets along the body diagonal, since an axis-aligned sweep can sit in a symmetry
     plane of the stencil. Interacting scenarios SKIP.
     """
 
@@ -345,8 +347,8 @@ class EggBoxGate(ArtifactGate):
 
         # The cross-check is off for the sweep only: the gate measures a difference between runs
         # that share every setting, so the absolute solver does not enter.
-        # The probes use ``derive_grid=False`` (D-64): a derived lattice is anchored on the first
-        # nucleus, so it would travel with the structure and the sweep would read zero.
+        # The probes use ``derive_grid=False``: a derived lattice is anchored on the first nucleus,
+        # so it would travel with the structure and the sweep would read zero.
         numerics = dataclasses.replace(
             artifact.numerics,
             grid=resolved_grid(artifact),

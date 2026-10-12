@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""O-22 probe: solve ``h2plus_R8_lda`` with one mixing change at a time and print the SCF trajectory.
+"""Solve ``h2plus_R8_lda`` with one mixing change at a time and print the SCF trajectory.
 
     python scripts/probes/stretched_h2plus_mixing_probe.py --kerker --max-iter 40 [--q0 1.5] [--alpha 0.15] [--device cuda]
 
-Needs more than 6 GB of host RAM on the derived 116^3 box (D-81). Writes
-``reports/h2plus_R8_mixing_<tag>.json`` with the energies, residuals and fallback events; a diagnostic, never a
-production path (the mixing change that converges it becomes a decision, D-nn).
+Probes the stretched H2+ scenario that does not converge under the default mixing. Needs more than
+6 GB of host RAM on the derived 116^3 box (D-81). Writes ``reports/h2plus_R8_mixing_<tag>.json``
+with the energies, residuals and fallback events; a diagnostic, never a production path (the mixing
+change that converges it becomes a decision in ``docs/05_DECISION_LOG.md``).
 """
 from __future__ import annotations
 

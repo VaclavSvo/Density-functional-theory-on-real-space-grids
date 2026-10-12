@@ -1,4 +1,8 @@
-"""Tier 5 -- anti-silent-failure: process gates checking the record around a number, not physics."""
+"""Tier 5 -- anti-silent-failure: process gates checking the record around a number, not physics.
+
+Design: D-24, D-33, D-37, D-40, D-42, D-53, D-57, D-60, D-61, D-66, D-69 in
+``docs/05_DECISION_LOG.md``.
+"""
 
 from __future__ import annotations
 
@@ -114,7 +118,7 @@ class GateReportGate(ArtifactGate):
     """G5.3 -- gate rows carrying neither a finite measurement nor a reason; 0 entries (exact).
 
     Evaluated last, over the report the other gates have written. ``SKIPPED`` and ``DEFERRED``
-    (D-37) carry a reason instead of a measurement by definition, so they are checked for that.
+    carry a reason instead of a measurement by definition, so they are checked for that.
     """
 
     spec = GateSpec(
@@ -155,7 +159,7 @@ class GateReportGate(ArtifactGate):
 class ScopeBoundaryGate(ComponentGate):
     """G5.7 -- forbidden ML imports and training functions in the solver source; 0 violations.
 
-    The scope boundary of ``docs/01_PROJECT.md (Part B)`` 3.4 and D-24: evaluating somebody
+    The scope boundary of ``docs/01_PROJECT.md (Part B)`` 3.4: evaluating somebody
     else's trained functional is in scope, producing one is not. The scan parses the source with
     ``ast``, so a name in a comment or string does not trip it and an aliased import does.
     """
@@ -172,8 +176,8 @@ class ScopeBoundaryGate(ComponentGate):
     def __init__(self, package_root: pathlib.Path | None = None) -> None:
         """Scan ``src/cdft`` by default, or an explicit directory.
 
-        The default root also scans the solver modules at the repository top level (D-57): moving a
-        file out of the package must not move it out of scope.
+        The default root also scans the solver modules at the repository top level: moving a file
+        out of the package must not move it out of scope.
         """
         self.package_root = package_root or pathlib.Path(__file__).resolve().parents[1]
         self.extra_files: tuple[pathlib.Path, ...] = ()
@@ -235,8 +239,8 @@ class DeterminismGate(ArtifactGate):
     A determinism threshold, not an accuracy one: bit-identity is not required because BLAS
     reductions are not associative across thread counts, while a logical non-determinism lands
     orders above 1e-9. EXACT, not DERIVED: the reference is the identity and the tolerance is
-    float64 reduction noise, tightening with no convergence parameter (B3). Both solves run on the
-    artifact's own device with ``deterministic=True`` and the cross-check off (D-61, D-69);
+    float64 reduction noise, tightening with no convergence parameter. Both solves run on the
+    artifact's own device with ``deterministic=True`` and the cross-check off;
     ``primary_vs_strict`` measures the kernel choice and is recorded, never thresholded. SKIPs when
     a strict solve fails.
     """
@@ -280,10 +284,10 @@ class DeterminismGate(ArtifactGate):
         try:
             for label in ("A", "B"):
                 started = time.perf_counter()
-                # Through the one door (D-53): re-solving an interacting scenario on the bare path
-                # would compare two different problems and report their gap as non-determinism.
-                # Cache bypassed (D-66): the claim covers the geometry build as well as the solve,
-                # so neither run may reuse a cached bundle.
+                # Through ``solve_scenario``, the single entry point: re-solving an interacting
+                # scenario on the bare path would compare two different problems and report their
+                # gap as non-determinism. Cache bypassed: the claim covers the geometry build as
+                # well as the solve, so neither run may reuse a cached bundle.
                 with geometry_cache.bypass():
                     repeat = solve_scenario(artifact.scenario, numerics, n_states=n_states, device=device)
                 wall = time.perf_counter() - started
@@ -360,7 +364,7 @@ class DeterminismGate(ArtifactGate):
 class RecordedFallbackGate(ArtifactGate):
     """G5.5 -- settings the run resolved differently from the request with no recorded reason; 0.
 
-    Covers the grid derivation (D-42), the physics-determined overrides (D-33) and an eigensolver
+    Covers the automatic grid derivation, the physics-determined overrides and an eigensolver
     that stops on its iteration limit: each must leave a readable sentence in
     ``measurements["grid_overrides"]``. The presence of the dictionary is not the check.
     """
@@ -461,11 +465,11 @@ class RecordedFallbackGate(ArtifactGate):
 
 
 class CatalogueConsistencyGate(ComponentGate):
-    """G5.8 -- disagreements between the catalogue, the wired evaluators and scenarios; 0 (D-40).
+    """G5.8 -- disagreements between the catalogue, the wired evaluators and scenarios; 0.
 
     Counted: a gate marked ``IMPLEMENTED`` with no evaluator, an evaluator for a gate marked
     ``DEFERRED`` or ``OUT_OF_PHASE_1``, an evaluator or a scenario naming a gate absent from the
-    catalogue, a ``DEFERRED`` entry with no owner (D-37), and an :data:`ENFORCED_ELSEWHERE` location
+    catalogue, a ``DEFERRED`` entry with no owner, and an :data:`ENFORCED_ELSEWHERE` location
     that no longer resolves -- otherwise that list becomes a place to hide an unimplemented gate.
     """
 
@@ -729,7 +733,7 @@ def measure_sync_budget() -> dict[str, dict[str, object]]:
 
 
 class SyncBudgetGate(ComponentGate):
-    """G5.9 -- census of two probe solves against :data:`SYNC_BUDGETS`; 0 budgets exceeded (D-60).
+    """G5.9 -- census of two probe solves against :data:`SYNC_BUDGETS`; 0 budgets exceeded.
 
     Compares loop-site reads and implicit syncs per iteration and launching operators per solve, the
     gains a single ``.item()`` back in a loop would silently undo. Always on the CPU: the census

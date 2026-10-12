@@ -1,7 +1,8 @@
 """``cdft`` -- the Classical DFT Solver: real-space, ground-state Kohn-Sham, non-neural.
 
 No machine learning in this package; G5.7 enforces it by static import scan. The frozen API is
-``contract.py`` at the repository root, put on the path by the block below (D-15, D-24).
+``contract.py`` at the repository root, put on the path by the block below. Design: D-15, D-24 in
+``docs/05_DECISION_LOG.md``.
 """
 
 from __future__ import annotations

@@ -3,7 +3,7 @@
 The source of truth for gate identity, against which ``tests/test_gate_catalogue.py`` checks the
 prose table of ``docs/03_METHOD.md (Part C)`` and G5.8 checks the wired evaluators and the
 scenario gate lists. The lifecycle field separates a gate that fails from one this build cannot
-evaluate and from one no Phase 1 system can reach.
+evaluate and from one outside the current all-electron, force-free scope.
 """
 
 from __future__ import annotations
@@ -20,9 +20,10 @@ class Lifecycle(str, Enum):
     """Where a gate stands in this build.
 
     ``IMPLEMENTED`` -- evaluated, verdict load-bearing. ``DEFERRED`` -- specified, not evaluable;
-    :attr:`GateEntry.owner` names the increment that owes it and a scenario naming it reports
-    ``DEFERRED``. ``OUT_OF_PHASE_1`` -- unreachable by any Phase 1 system, so a scenario naming one
-    is a specification error and G5.8 fails rather than deferring.
+    :attr:`GateEntry.owner` names who owes it and a scenario naming it reports ``DEFERRED``.
+    ``OUT_OF_PHASE_1`` -- unreachable in the all-electron, force-free scope (it needs
+    pseudopotentials or geometry optimisation), so a scenario naming one is a specification error
+    and G5.8 fails rather than deferring.
     """
 
     IMPLEMENTED = "implemented"
@@ -40,7 +41,7 @@ class GateEntry:
     kind: GateKind
     lifecycle: Lifecycle
     owner: str = ""
-    """For ``DEFERRED`` and ``OUT_OF_PHASE_1``: which increment or phase supplies this gate."""
+    """For ``DEFERRED`` and ``OUT_OF_PHASE_1``: which later work supplies this gate."""
 
     note: str = ""
 
@@ -287,11 +288,11 @@ def specified_ids() -> frozenset[str]:
 
 
 def deferral_owner(gate_id: str) -> str | None:
-    """Return the increment that owes this gate, or ``None`` if it is not a legitimate deferral.
+    """Return who owes this gate, or ``None`` if it is not a legitimate deferral.
 
-    ``OUT_OF_PHASE_1`` deliberately returns ``None``: a Phase 1 scenario naming a Phase 2 gate is a
-    specification error and must fail loudly, not wait quietly for a phase that will never evaluate
-    it on this system.
+    ``OUT_OF_PHASE_1`` deliberately returns ``None``: an all-electron scenario naming a gate that
+    needs pseudopotentials or forces is a specification error and must fail loudly, not wait for
+    work that will never evaluate it on this system.
     """
     entry = _BY_ID.get(gate_id)
     if entry is None or entry.lifecycle is not Lifecycle.DEFERRED:

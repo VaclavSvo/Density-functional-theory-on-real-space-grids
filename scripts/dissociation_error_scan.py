@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Error against the two-centre oracle as a function of bond length (ledger entry A-2).
+"""Error against the two-centre oracle as a function of bond length.
 
     python scripts/dissociation_error_scan.py     # writes reports/dissociation_error_scan.json
 
-Sets the priority of A-1 by answering whether the multi-centre error is a smooth systematic --
+Decides how urgent the multi-centre energy error is by answering whether it is a smooth systematic --
 which largely cancels in the energy differences this project reports, making a 1e-3 Ha absolute
 error far less serious than it looks -- or has structure, which does not cancel and would make
 every dissociation curve unusable.

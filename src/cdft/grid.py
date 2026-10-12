@@ -2,9 +2,11 @@
 
 Implements :class:`~contract.GridProtocol`. Every solver field lives on the flat point index defined
 here, and the mapping back to the three-dimensional box lives here and nowhere else. The domain is
-the union of spheres around the atoms rather than a cube (D-08), and the stencil halo is filled per
-:class:`~contract.BoundaryMode`, never assumed zero. The sizing rules below are D-42/D-53/D-64;
-their measurements are in ``docs/03_METHOD.md (Part E)``.
+the union of spheres around the atoms rather than a cube, and the stencil halo is filled per
+:class:`~contract.BoundaryMode`, never assumed zero.
+
+Design: D-08, D-60, D-73 and the sizing rules D-42, D-53, D-64 in ``docs/05_DECISION_LOG.md``;
+their measurements are in ``docs/03_METHOD.md`` Part E.
 """
 
 from __future__ import annotations
@@ -55,25 +57,26 @@ __all__ = [
     "active_rule",
 ]
 
-#: Half-box in bohr per unit nuclear charge, cusp-factorised path: a box-limited centre (D-42).
+#: Half-box in bohr per unit nuclear charge, cusp-factorised path: a box-limited centre.
 COULOMB_HALF_BOX_PER_Z = 16.0
 
-#: Points along each box edge for a single centre -- a count, not a spacing (D-42).
+#: Points along each box edge for a single centre -- a count, not a spacing.
 POINTS_PER_EDGE = 33
 
-#: Vacuum in bohr beyond the nuclear span for a multi-centre system (D-42).
+#: Vacuum in bohr beyond the nuclear span for a multi-centre system.
 VACUUM_PADDING = 12.0
 
-#: Spacing in bohr for a multi-centre system (D-42); the residual 1.0e-03 Ha is open item O-13.
+#: Spacing in bohr for a multi-centre system; its plain-sampling residual (1.0e-03 Ha) is what the
+#: cusp-aware quadrature addresses.
 MOLECULAR_SPACING = 0.25
 
 
 #: Spacing in bohr for an interacting (Hartree + XC) all-electron scenario, atom or molecule alike:
-#: once ``v_H + v_xc`` enter, a single centre is spacing-limited too (D-53). A cost choice, not a
+#: once ``v_H + v_xc`` enter, a single centre is spacing-limited too. A cost choice, not a
 #: limit -- ``scripts/interacting_ladder.py`` measures the O(h^3) ladder behind it.
 INTERACTING_SPACING = 0.25
 
-#: Floor in bohr for the interacting vacuum margin, where the helium ladder converges (D-53).
+#: Floor in bohr for the interacting vacuum margin, where the helium ladder converges.
 INTERACTING_HALF_BOX = 7.0
 
 #: Charge fraction the derived box may leave outside it, ``exp(-2 kappa R) = 1e-9``: the margin is
@@ -84,7 +87,7 @@ INTERACTING_TAIL_FRACTION = 1.0e-9
 SLATER_1S_SCREENING = 0.30
 
 
-#: Derivation targets :func:`grid_rule` may swap; each is the module constant of that name (D-73).
+#: Derivation targets :func:`grid_rule` may swap; each is the module constant of that name.
 RULE_TARGETS: tuple[str, ...] = (
     "interacting_spacing",
     "interacting_half_box",
@@ -116,7 +119,7 @@ def _validated_target(name: str, value: float) -> float:
 
 @contextlib.contextmanager
 def grid_rule(**targets: float) -> Iterator[None]:
-    """Swap the D-42/D-53/D-64 derivation targets for the duration of the block (D-73).
+    """Swap the grid-derivation targets (:data:`RULE_TARGETS`) for the duration of the block.
 
     Module-scoped, not an argument: the gates that re-solve call the solver again from the
     artifact's numerics and must see the same rule. Nestable; no arguments is a no-op.
@@ -149,7 +152,7 @@ def _rule_sentence() -> str:
 
 
 def interacting_half_box(structure: AtomicStructure, n_electrons: float) -> float:
-    """Return the vacuum margin in bohr for an interacting scenario (D-53).
+    """Return the vacuum margin in bohr for an interacting scenario.
 
     ``max(INTERACTING_HALF_BOX, ln(1 / INTERACTING_TAIL_FRACTION) / (2 kappa))`` with
     ``kappa = min_a (Z_a - 0.30 max(0, n_a - 1))`` over the electrons per atom: the hydrogenic decay
@@ -180,12 +183,12 @@ def interacting_box_edge(structure: AtomicStructure, n_electrons: float | None =
     return span + 2.0 * half
 
 
-#: Relative tolerance for "this nucleus sits on the lattice": 1e-9 of a spacing is round-off (D-64).
+#: Relative tolerance for "this nucleus sits on the lattice": 1e-9 of a spacing is round-off.
 LATTICE_TOLERANCE = 1.0e-9
 
 
 def lattice_spacing(structure: AtomicStructure, target: float) -> tuple[float, dict[str, object]]:
-    """Return the spacing nearest ``target`` on which every nucleus is a lattice point (D-64).
+    """Return the spacing nearest ``target`` on which every nucleus is a lattice point.
 
     ``h = d / max(1, round(d / target))`` with ``d`` the smallest non-zero coordinate difference
     between nuclei; every other difference must then be a multiple of ``h`` to
@@ -224,9 +227,9 @@ def lattice_spacing(structure: AtomicStructure, target: float) -> tuple[float, d
 
 
 def lattice_box_edge(edge: float, spacing: float) -> float:
-    """Round ``edge`` up to a whole number of cells of ``spacing`` (D-64).
+    """Round ``edge`` up to a whole number of cells of ``spacing``.
 
-    Up, never to nearest: the edge carries a vacuum margin (D-42, D-53) that rounding down would
+    Up, never to nearest: the edge carries a vacuum margin that rounding down would
     shave. The exact multiple lets :meth:`UniformGrid.from_config` reproduce ``spacing`` to the bit.
     """
     cells = int(math.ceil(edge / spacing - LATTICE_TOLERANCE))
@@ -234,7 +237,7 @@ def lattice_box_edge(edge: float, spacing: float) -> float:
 
 
 def lattice_offsets(structure: AtomicStructure, origin: tuple[float, float, float], spacing: float) -> list[float]:
-    """Distance of every nucleus to its nearest lattice point, in bohr (the O-23 measurement)."""
+    """Each nucleus's distance to its nearest lattice point in bohr (``nucleus_offgrid_bohr``)."""
     out = []
     for r in structure.positions:
         total = 0.0
@@ -248,7 +251,8 @@ def lattice_offsets(structure: AtomicStructure, origin: tuple[float, float, floa
 def interacting_spacing(structure: AtomicStructure, edge: float | None = None) -> float:
     """Return :func:`lattice_spacing` at :data:`INTERACTING_SPACING` for an interacting scenario.
 
-    ``edge`` is accepted and ignored: since D-64 the edge is rounded to the spacing, not conversely.
+    ``edge`` is accepted and ignored: the edge is rounded to the spacing (:func:`lattice_box_edge`),
+    not conversely.
     """
     h, _ = lattice_spacing(structure, INTERACTING_SPACING)
     return h
@@ -277,7 +281,7 @@ def coulomb_spacing(structure: AtomicStructure, edge: float) -> float:
     """Return the spacing in bohr that pairs with ``edge`` for ``structure``.
 
     Single centre ``edge / (POINTS_PER_EDGE - 1)``, so the rule scales with ``Z``; multi centre the
-    lattice-compatible spacing nearest :data:`MOLECULAR_SPACING` (D-64), independent of the box.
+    lattice-compatible spacing nearest :data:`MOLECULAR_SPACING`, independent of the box.
     """
     numbers = [int(z) for z in structure.numbers]
     if len(numbers) == 1:
@@ -292,10 +296,10 @@ def grid_config_for_scenario(
     """Reconcile a numerics grid configuration with what a scenario's physics dictates.
 
     A few numerics values are determined by the physics: an infinite well needs a box of its own
-    edge and odd reflection, and on the cusp-factorised path box and spacing follow from the nuclei
-    (D-42, D-53). ``derive_grid=False`` bypasses that rule, for the convergence gates G3.1/G3.2/G3.5
-    whose job is to vary the very numbers it fixes; ``interacting`` selects the D-53 rule, D-42
-    being exact only for the bare eigenproblem.
+    edge and odd reflection, and on the cusp-factorised path box and spacing follow from the nuclei.
+    ``derive_grid=False`` bypasses that rule, for the convergence gates G3.1/G3.2/G3.5
+    whose job is to vary the very numbers it fixes; ``interacting`` selects the interacting rule,
+    the box-limited single-centre rule being exact only for the bare eigenproblem.
 
     Returns ``(resolved_config, overrides)``, ``overrides`` mapping each changed field to a sentence
     explaining why, for :attr:`~contract.RunArtifact.measurements` (gate G5.5: fallbacks are
@@ -331,7 +335,7 @@ def grid_config_for_scenario(
             "odd reflection is only correct at a hard wall; this scenario decays into vacuum"
         )
 
-    # The Coulomb sizing rule (D-42): a single centre is box-limited, a molecule spacing-limited.
+    # The Coulomb sizing rule: a single centre is box-limited, a molecule spacing-limited.
     if (
         derive_grid
         and interacting
@@ -377,7 +381,7 @@ def grid_config_for_scenario(
         single = scenario.structure.n_atoms == 1
         z_max = max(int(z) for z in scenario.structure.numbers)
         if not single:
-            # The edge holds a whole number of cells (D-64), so `from_config` reproduces `derived_h`
+            # The edge holds a whole number of cells, so `from_config` reproduces `derived_h`
             # exactly and every nucleus is a lattice point.
             _, lattice = lattice_spacing(scenario.structure, MOLECULAR_SPACING)
             derived_edge = lattice_box_edge(derived_edge, derived_h)
@@ -425,7 +429,7 @@ def grid_config_for_scenario(
 
 
 def _lattice_sentence(spacing: float, target: float, detail: dict[str, object]) -> str:
-    """The recorded explanation of the lattice rule (D-64) for ``measurements["grid_overrides"]``."""
+    """The recorded explanation of the lattice rule for ``measurements["grid_overrides"]``."""
     cells = detail.get("cells_between_nuclei", [])
     if not detail.get("commensurate", True):
         return (
@@ -444,7 +448,7 @@ def _lattice_sentence(spacing: float, target: float, detail: dict[str, object]) 
 def lattice_anchor(scenario: "Any", *, derive_grid: bool) -> tuple[float, float, float] | None:
     """Return the lattice anchor for a solve: the first nucleus of a derived grid, else ``None``.
 
-    ``None`` -- the coordinate origin is a lattice point, the pre-D-64 convention -- when the grid
+    ``None`` -- the coordinate origin is a lattice point, the unanchored convention -- when the grid
     is not derived (the gates that vary the grid or the nuclei against a fixed lattice, whose sweeps
     an anchor following the nuclei would flatten) or when the scenario has no nuclei.
     """
@@ -458,7 +462,7 @@ class GridGeometry:
     """The box a grid is built in: its origin, its shape in points, and its spacing.
 
     Separate from :class:`UniformGrid` so a geometry can be compared and its memory checked before
-    the mask and the coordinate table are allocated (risk R2).
+    the mask and the coordinate table are allocated.
     """
 
     shape: tuple[int, int, int]
@@ -537,7 +541,7 @@ class UniformGrid:
         ).to(torch.long)
         #: True when the mask keeps every box point: ``torch.nonzero`` lists points in C order, so
         #: the masked field is the flattened box and scatter/gather are plain copies -- no
-        #: ``index_put_``, no ``index`` (D-60). Copies move bits unchanged, so the numbers stay
+        #: ``index_put_``, no ``index``. Copies move bits unchanged, so the numbers stay
         #: those of the indexed path, which is verified against the index once here.
         self._full_box = n_points == geometry.n_box_points and bool(
             torch.equal(
@@ -565,10 +569,10 @@ class UniformGrid:
         interior points per axis -- which makes the analytic spectrum of the infinite well the
         spectrum of the discrete problem.
 
-        ``anchor`` (D-64) is a point the lattice must pass through; the box is otherwise centred on
-        the coordinate origin as before. ``None`` keeps the pre-D-64 convention, the origin itself
-        on the lattice: the two agree whenever the anchor is a multiple of ``h`` from the origin
-        (every single-centre scenario, H2+ at R = 2 and 8), so those grids do not move. The solvers
+        ``anchor`` is a point the lattice must pass through; the box is otherwise centred on the
+        coordinate origin. ``None`` puts the origin itself on the lattice: the two agree whenever
+        the anchor is a multiple of ``h`` from the origin (every single-centre scenario, H2+ at
+        R = 2 and 8). The solvers
         pass the first nucleus for a derived grid (:func:`lattice_anchor`), ``None`` when a gate
         varies the grid.
         """
@@ -586,7 +590,7 @@ class UniformGrid:
                 h = lengths[0] / (counts[0] - 1) if counts[0] > 1 else h
                 # Snap the box so the coordinate origin -- or the anchor -- lands exactly on a grid
                 # point: the -Z/r regularisation applies only at a coincident point, and a nucleus
-                # off the lattice changes the radial shells the Kato fit of G1.11 reads (O-23).
+                # off the lattice changes the radial shells the Kato fit of G1.11 reads.
                 if anchor is None:
                     origin = tuple(-h * round(0.5 * length / h) for length in lengths)
                 else:
